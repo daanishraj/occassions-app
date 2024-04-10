@@ -1,0 +1,12 @@
+{
+    "exclude": ["node_modules"],
+    "extends": "tsconfig/base.json",
+    "include": ["src", "tests", ".eslintrc.js"],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"]
+      }
+    }
+  }
+  

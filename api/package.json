@@ -1,0 +1,27 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "run-p type-check build:only",
+    "build:only": "tsup src/index.ts --silent --sourcemap",
+    "dev": "tsup src/index.ts --silent --watch --onSuccess 'nodemon --delay 0.5 --watch ../../packages dist/index.js'",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "start": "nodemon src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.0",
+    "supertest": "^6.3.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "http-status": "^1.7.4"
+  }
+}

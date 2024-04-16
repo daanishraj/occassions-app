@@ -9,7 +9,9 @@
     "dev": "tsup src/index.ts --silent --watch --onSuccess 'nodemon --delay 0.5 --watch ../../packages dist/index.js'",
     "type-check": "tsc --noEmit",
     "test": "jest",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "full-clean": "rm -rf .turbo dist node_modules",
+    "clean": "rm -rf .turbo dist"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
     "http-status": "^1.7.4"
   }
 }

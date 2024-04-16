@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import routes from "./routes"
+import "express-async-errors"
 
 // const config = require('./utils/config')
 // require('express-async-errors')
@@ -14,6 +15,10 @@ const app = express()
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
+
+app.get("/", (req, res) => {
+    res.send("I am alive!");
+  });
 
 app.use('/', routes)
 // app.use('/api/users', userRouter)

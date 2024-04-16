@@ -1,0 +1,53 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": ["turbo.json", "package.json", "package-lock.json", ".eslintrc.cjs"],
+    "pipeline": {
+      "build": {
+        "dependsOn": ["^build"],
+        "outputs": ["dist/**"],
+        "outputMode": "new-only"
+      },
+      "build:only": {
+        "dependsOn": ["^build:only"],
+        "outputs": ["dist/**"]
+      },
+      "lint": {
+        "dependsOn": ["^build"],
+        "outputMode": "new-only"
+      },
+      "lint:ci": {
+        "outputMode": "new-only"
+      },
+      "dev": {
+        "cache": false,
+        "dependsOn": ["build"]
+      },
+      "dev:type-check": {
+        "cache": false,
+        "dependsOn": ["build"]
+      },
+      "clean": {
+        "cache": false
+      },
+      "full-clean": {
+        "cache": false
+      },
+      "test": {
+        "dependsOn": ["build"],
+        "outputMode": "new-only"
+      },
+      "test:ci": {
+        "dependsOn": ["build"],
+        "outputMode": "new-only"
+      },
+      "migrate": {
+        "dependsOn": ["build"],
+        "cache": false
+      },
+      "down": {
+        "dependsOn": ["build"],
+        "cache": false
+      }
+    }
+  }
+  

@@ -5,19 +5,20 @@ module.exports = {
   env: { browser: true, es2020: true },
   extends: [
     "eslint:recommended",
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-    "prettier"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier",
   ],
   ignorePatterns: [".turbo/**/*", "dist/**/*"],
-  parser: '@typescript-eslint/parser',
-  plugins: ["import", "unused-imports", "no-only-tests", 'react-refresh'],
+  parser: "@typescript-eslint/parser",
+  plugins: ["import", "unused-imports", "no-only-tests", "react-refresh"],
   rules: {
     "@typescript-eslint/no-unused-vars": [
       "error",
       { ignoreRestSiblings: true, varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
     ],
-    "no-unused-vars": "off", // One of those is enough (@typescript-eslint/no-unused-vars)
+    "no-unused-vars": "on", // One of those is enough (@typescript-eslint/no-unused-vars)
+    "import/no-unused-modules": ["error", { missingExports: true }],
     "no-only-tests/no-only-tests": "error",
     "import/no-extraneous-dependencies": [
       "error",
@@ -29,10 +30,7 @@ module.exports = {
         includeTypes: true,
       },
     ],
-        'react-refresh/only-export-components': [
-          'warn',
-          { allowConstantExport: true },
-        ],
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "sort-imports": [
       "error",
       {

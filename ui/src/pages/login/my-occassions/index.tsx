@@ -1,29 +1,21 @@
 import React from "react";
 import { Button } from "@mantine/core";
 import { Occasion } from "../../../../../api/src/controllers/occassions.controller";
-import occassionsService from "../../../services/Occassions.service";
 import OccasionsTable from "../../../components/occassions-table/OccassionsTable";
 import styles from "./index.module.css";
 import AddOccassionDialog from "../../../components/add-occassion-dialog";
+import useGetOccasion from "../../../hooks/use-get-occasion";
 
 const MyOccassionsPage = () => {
   const [occassions, setOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
+  const { data, isLoading, isError, error } = useGetOccasion();
 
   React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await occassionsService.getOccassions();
-        console.log("print the response", { data });
-        setOccassions(data);
-      } catch (error) {
-        console.log({ error });
-        console.log("error fetching occassions data");
-      }
-    };
-
-    getData();
-  }, []);
+    if (data) {
+      setOccassions(data);
+    }
+  }, [data]);
 
   const onCloseAddDialog = () => setAddOccassion(false);
 
@@ -33,6 +25,24 @@ const MyOccassionsPage = () => {
   };
 
   console.log({ occassions });
+
+  if (isError) {
+    return (
+      <div className={styles.container}>
+        <span>There was an error fetching the data</span>
+        <span>{error?.message}</span>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <>
+        <div className={styles.container}></div>
+        <div>Fetching data..</div>;
+      </>
+    );
+  }
 
   return (
     <>

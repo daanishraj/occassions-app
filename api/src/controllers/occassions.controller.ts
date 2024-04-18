@@ -119,6 +119,11 @@ const getOccasions = async (req: Request, res: Response) => {
 const addOccasion = async (req: Request, res: Response) => {
   const id = uuidV4();
   req.body.id = id;
+  const { name, occasionType, month, day } = req.body;
+  if (!(name && occasionType && month && day)) {
+    console.log("invalid payload - missing fields!");
+    res.status(400).send({ error: "some fields are missing" });
+  }
   data.push(req.body);
   res.status(200).send(req.body);
 };

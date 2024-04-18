@@ -1,26 +1,19 @@
 import React from "react";
 import { Button, Modal, Select, TextInput } from "@mantine/core";
 import { AddOccasion, DaysofMonth, Month, OccasionType } from "../../../../api/src/controllers/occassions.controller";
-import OccassionsService from "../../services/Occassions.service";
+import useCreateOccasion from "../../hooks/use-create-occasion";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 
-// type NewOccassion = {
-//   name: string;
-//   occassionType: OccassionType;
-//   month: Month;
-//   day: DaysofMonth;
-// };
-
-type NewOccasion = Partial<AddOccasion>;
+export type NewOccasion = Partial<AddOccasion>;
 
 const ADD_DIALOG_TITLE = "Add an Occassion";
 
 const AddOccassionDialog = ({ opened, onClose }: Props) => {
-  const [newOccassion, setNewOccassion] = React.useState<NewOccasion>({
+  const [newOccassion, setNewOccasion] = React.useState<NewOccasion>({
     name: "",
   });
 
@@ -28,18 +21,20 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     Array.from({ length: 31 }, (_, index) => String(index + 1)),
   );
 
+  const { addOccasion } = useCreateOccasion({ setNewOccasion, onClose });
+
   const onSelectOccassion = (value: string | null) => {
     if (value) {
-      setNewOccassion({ ...newOccassion, occasionType: value as OccasionType });
+      setNewOccasion({ ...newOccassion, occasionType: value as OccasionType });
     }
   };
 
-  const onChangeName = (value: string | undefined) => value && setNewOccassion({ ...newOccassion, name: value });
+  const onChangeName = (value: string | undefined) => value && setNewOccasion({ ...newOccassion, name: value });
 
   const onSelectMonth = (value: string | null) => {
     if (value) {
       const userSelection = value as Month;
-      setNewOccassion({ ...newOccassion, month: userSelection });
+      setNewOccasion({ ...newOccassion, month: userSelection });
 
       if (
         userSelection === Month.JANUARY ||
@@ -62,7 +57,7 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
   };
 
   const onSelectDay = (value: string | null) =>
-    value && setNewOccassion({ ...newOccassion, day: parseInt(value) as DaysofMonth });
+    value && setNewOccasion({ ...newOccassion, day: parseInt(value) as DaysofMonth });
 
   const selectOccassionOptions: string[] = Object.values(OccasionType) as string[];
   const selectMonthOptions = [
@@ -81,9 +76,7 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
   ];
 
   const handleAdd = async () => {
-    await OccassionsService.addOccassion(newOccassion as AddOccasion);
-    await OccassionsService.getOccassions();
-    onClose();
+    addOccasion(newOccassion as AddOccasion);
   };
   return (
     <Modal opened={opened} onClose={onClose} title={ADD_DIALOG_TITLE}>
@@ -119,7 +112,12 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
         value={newOccassion.day?.toString()}
         onChange={onSelectDay}
       />
-      <Button onClick={handleAdd}>Add</Button>
+      <Button
+        disabled={!(newOccassion.day && newOccassion.month && newOccassion.name && newOccassion.occasionType)}
+        onClick={handleAdd}
+      >
+        Add
+      </Button>
     </Modal>
   );
 };

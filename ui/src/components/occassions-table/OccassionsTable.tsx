@@ -1,28 +1,28 @@
-import { Occassion } from "../../../../api/src/controllers/occassions.controller";
+import { Occasion } from "../../../../api/src/controllers/occassions.controller";
 import { Table } from "@mantine/core";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
-import styles from "./styles.module.css";
+import OccassionsService from "../../services/Occassions.service";
 
-const OccasionsTable = ({ occassions }: { occassions: Occassion[] }) => {
-  console.log({ occassions });
-
-  const onRemoveOccassion = () => {
-    console.log("delete this row");
+const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
+  const onRemoveOccassion = async (id: string) => {
+    await OccassionsService.deleteOccassion(id);
+    //TODO: handle updating of the state on the FE
+    await OccassionsService.getOccassions();
   };
 
-  const onEditOccassion = () => {
+  const onEditOccassion = async () => {
     console.log("edit this row");
   };
 
-  const rows = occassions.map((occassion: Occassion) => (
+  const rows = occassions.map((occassion: Occasion) => (
     <Table.Tr key={occassion.id}>
       <Table.Td>{occassion.name}</Table.Td>
-      <Table.Td>{occassion.occassionType}</Table.Td>
-      <Table.Td>{occassion.date}</Table.Td>
-      <Table.Td>{occassion.comment}</Table.Td>
+      <Table.Td>{occassion.occasionType}</Table.Td>
+      <Table.Td>{occassion.month}</Table.Td>
+      <Table.Td>{occassion.day}</Table.Td>
       <Table.Td>
         <IconEdit onClick={onEditOccassion} />
-        <IconTrash onClick={onRemoveOccassion} />
+        <IconTrash onClick={() => onRemoveOccassion(occassion.id)} />
       </Table.Td>
     </Table.Tr>
   ));
@@ -34,8 +34,8 @@ const OccasionsTable = ({ occassions }: { occassions: Occassion[] }) => {
         <Table.Tr>
           <Table.Th>Name</Table.Th>
           <Table.Th>Occassion Type</Table.Th>
-          <Table.Th>Date</Table.Th>
-          <Table.Th>Comments</Table.Th>
+          <Table.Th>Month</Table.Th>
+          <Table.Th>Day</Table.Th>
           <Table.Th>Actions</Table.Th>
         </Table.Tr>
       </Table.Thead>

@@ -25,5 +25,6 @@ body > div {
 .button {
   align-self: flex-end;
   /*remove hardcoding*/
-  margin-right: 200px;
+  margin-right: 300px;
+  margin-bottom: 50px;
 }

@@ -1,8 +1,10 @@
-import { occassionsController } from "@/controllers/occassions.controller";
+import { occasionsController } from "@/controllers/occassions.controller";
 import express from "express";
 
 const router = express.Router();
 
-router.get("/", occassionsController.getOccasions)
+router.get("/", occasionsController.getOccasions);
+router.post("/", occasionsController.addOccasion);
+router.delete("/:id", occasionsController.deleteOccasion);
 
 export default router;

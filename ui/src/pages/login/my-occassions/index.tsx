@@ -1,12 +1,14 @@
 import React from "react";
 import { Button } from "@mantine/core";
-import { Occassion } from "../../../../../api/src/controllers/occassions.controller";
+import { Occasion } from "../../../../../api/src/controllers/occassions.controller";
 import occassionsService from "../../../services/Occassions.service";
 import OccasionsTable from "../../../components/occassions-table/OccassionsTable";
 import styles from "./index.module.css";
+import AddOccassionDialog from "../../../components/add-occassion-dialog";
 
 const MyOccassionsPage = () => {
-  const [occassions, setOccassions] = React.useState<Occassion[]>([]);
+  const [occassions, setOccassions] = React.useState<Occasion[]>([]);
+  const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const getData = async () => {
@@ -23,8 +25,11 @@ const MyOccassionsPage = () => {
     getData();
   }, []);
 
+  const onCloseAddDialog = () => setAddOccassion(false);
+
   const handleClick = () => {
     console.log("create a new occasion..");
+    setAddOccassion(true);
   };
 
   console.log({ occassions });
@@ -33,8 +38,9 @@ const MyOccassionsPage = () => {
     <>
       <div className={styles.container}>
         <Button className={styles.button} variant="filled" onClick={handleClick}>
-          Create
+          Add
         </Button>
+        <AddOccassionDialog opened={addOccassion} onClose={onCloseAddDialog} />
         <div className={styles.tableContainer}>
           <OccasionsTable occassions={occassions} />
         </div>

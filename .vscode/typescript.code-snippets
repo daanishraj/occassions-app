@@ -1,0 +1,12 @@
+{
+  "sleep": {
+    "prefix": "sleep",
+    "body": "await new Promise((resolve) => setInterval(resolve, 1000));",
+  },
+
+  "Print-to-console": {
+    "prefix": "clg",
+    "body": ["console.log();", "$2"],
+    "description": "Log output to console",
+  },
+}

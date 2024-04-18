@@ -1,58 +1,135 @@
-import type { Request, Response } from "express";
+//TODO: fix the tsconfig.json to avoid having write this line
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-enum OccassionType {
+import type { Request, Response } from "express";
+import { v4 as uuidV4 } from "uuid";
+
+export enum Month {
+  JANUARY = "January",
+  FEBRUARY = "February",
+  MARCH = "March",
+  APRIL = "April",
+  MAY = "May",
+  JUNE = "June",
+  JULY = "July",
+  AUGUST = "August",
+  SEPTEMBER = "September",
+  OCTOBER = "October",
+  NOVEMBER = "November",
+  DECEMBER = "December",
+}
+
+export type DaysofMonth =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
+  | 25
+  | 26
+  | 27
+  | 28
+  | 29
+  | 30
+  | 31;
+
+export enum OccasionType {
   BIRTHDAY = "birthday",
   ANNIVERSARY = "anniversary",
 }
 
-export type Occassion = {
-  id: number;
+export type Occasion = {
+  id: string;
   name: string;
-  occassionType: OccassionType;
-  date: string;
-  comment?: string;
+  occasionType: OccasionType;
+  month: Month;
+  day: DaysofMonth;
 };
 
-const testData: Occassion[] = [
+export type AddOccasion = {
+  name: string;
+  occasionType: OccasionType;
+  month: Month;
+  day: DaysofMonth;
+};
+
+let data: Occasion[] = [
   {
-    id: 1001,
+    id: uuidV4(),
     name: "PY",
-    occassionType: OccassionType.BIRTHDAY,
-    date: "05/01",
+    occasionType: OccasionType.BIRTHDAY,
+    day: 1,
+    month: Month.JANUARY,
   },
   {
-    id: 1002,
+    id: uuidV4(),
     name: "Sri Yukteswar",
-    occassionType: OccassionType.BIRTHDAY,
-    date: "10/05",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.MAY,
+    day: 10,
   },
   {
-    id: 1003,
+    id: uuidV4(),
     name: "Gigi Bartha",
-    occassionType: OccassionType.BIRTHDAY,
-    date: "31/12",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.DECEMBER,
+    day: 31,
   },
   {
-    id: 1004,
+    id: uuidV4(),
     name: "Oliver Guenay",
-    occassionType: OccassionType.BIRTHDAY,
-    date: "17/11",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.NOVEMBER,
+    day: 17,
   },
   {
-    id: 1005,
+    id: uuidV4(),
     name: "Sophia Waldvogel",
-    occassionType: OccassionType.BIRTHDAY,
-    date: "24/12",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.DECEMBER,
+    day: 24,
   },
 ];
 
-const getOccasions = (req: Request, res: Response) => {
-  console.log({ req });
-
-  console.log("inside getOccassions");
-  res.status(200).send(testData);
+// TODO: fix this
+// @ts-ignore
+const getOccasions = async (req: Request, res: Response) => {
+  res.status(200).send(data);
 };
 
-export const occassionsController = {
+const addOccasion = async (req: Request, res: Response) => {
+  const id = uuidV4();
+  req.body.id = id;
+  data.push(req.body);
+  res.status(200).send(req.body);
+};
+
+const deleteOccasion = async (req: Request, res: Response) => {
+  data = data.filter((occasion: Occasion) => occasion.id !== req.params.id);
+  res.status(204).send();
+};
+
+export const occasionsController = {
   getOccasions,
+  deleteOccasion,
+  addOccasion,
 };

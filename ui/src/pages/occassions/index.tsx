@@ -1,12 +1,12 @@
-import React from "react";
 import { Button } from "@mantine/core";
-import { Occasion } from "../../../../../api/src/controllers/occassions.controller";
-import OccasionsTable from "../../../components/occassions-table/OccassionsTable";
+import React from "react";
+import { Occasion } from "../../../../api/src/controllers/occassions.controller";
+import AddOccassionDialog from "../../components/add-occassion-dialog";
+import OccasionsTable from "../../components/occassions-table/OccassionsTable";
+import useGetOccasion from "../../hooks/use-get-occasion";
 import styles from "./index.module.css";
-import AddOccassionDialog from "../../../components/add-occassion-dialog";
-import useGetOccasion from "../../../hooks/use-get-occasion";
 
-const MyOccassionsPage = () => {
+const Occassions = () => {
   const [occassions, setOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
   const { data, isLoading, isError, error } = useGetOccasion();
@@ -59,4 +59,4 @@ const MyOccassionsPage = () => {
   );
 };
 
-export default MyOccassionsPage;
+export default Occassions;

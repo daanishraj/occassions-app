@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { NewOccasion } from "../components/add-occassion-dialog";
 import OccassionsService from "../services/Occassions.service";
 import { QueryKeys } from "../types";
-import { NewOccasion } from "../components/add-occassion-dialog";
-import React from "react";
 
 type TProps = {
   setNewOccasion: (defaultOccassion: NewOccasion) => void;

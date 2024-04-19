@@ -9,7 +9,7 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "prettier",
   ],
-  ignorePatterns: [".turbo/**/*", "dist/**/*"],
+  ignorePatterns: [".turbo/**/*", "dist/**/*", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
   plugins: ["import", "unused-imports", "no-only-tests", "react-refresh"],
   rules: {

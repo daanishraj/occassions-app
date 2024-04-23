@@ -9,4 +9,10 @@
     "body": ["console.log();", "$2"],
     "description": "Log output to console",
   },
+
+  "Export Default": {
+    "prefix": "ed",
+    "body": ["export default "],
+    "description": "Export default statement",
+  },
 }

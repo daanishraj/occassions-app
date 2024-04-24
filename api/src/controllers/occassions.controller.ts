@@ -1,6 +1,3 @@
-//TODO: fix the tsconfig.json to avoid having write this line
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import type { Request, Response } from "express";
 import { v4 as uuidV4 } from "uuid";
 
@@ -110,8 +107,6 @@ let data: Occasion[] = [
   },
 ];
 
-// TODO: fix this
-// @ts-ignore
 const getOccasions = async (req: Request, res: Response) => {
   res.status(200).send(data);
 };

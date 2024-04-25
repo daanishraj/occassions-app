@@ -13,8 +13,6 @@ const UserAvatar = ({ imageName, userName }: TProps) => {
     .join("");
 
   if (!imageName) {
-    console.log("i am here");
-
     return (
       <>
         <div className={styles.avatar}>

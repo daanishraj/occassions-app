@@ -1,5 +1,7 @@
+import UserInfo from "./components/userInfo";
+
 const Profile = () => {
-  return <div>Welcome to your profile! :)</div>;
+  return <UserInfo />;
 };
 
 export default Profile;

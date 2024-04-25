@@ -1,6 +1,6 @@
-import { Occasion } from "../../../../api/src/controllers/occassions.controller";
 import { Table } from "@mantine/core";
-import { IconTrash, IconEdit } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { Occasion } from "../../../../api/src/controllers/occassions.controller";
 import OccassionsService from "../../services/Occassions.service";
 
 const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
@@ -28,7 +28,6 @@ const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
   ));
 
   return (
-    // <Table className={styles.test}>
     <Table>
       <Table.Thead>
         <Table.Tr>

@@ -23,7 +23,7 @@ body > div {
 
 .button {
   align-self: flex-end;
-  /*remove hardcoding*/
+  /*TODO: remove hardcoding*/
   margin-right: 300px;
   margin-bottom: 50px;
 }

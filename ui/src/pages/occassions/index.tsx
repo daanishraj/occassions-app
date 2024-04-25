@@ -37,10 +37,9 @@ const Occassions = () => {
 
   if (isLoading) {
     return (
-      <>
-        <div className={styles.container}></div>
+      <div className={styles.container}>
         <div>Fetching data..</div>;
-      </>
+      </div>
     );
   }
 

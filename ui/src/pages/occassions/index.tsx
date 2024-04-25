@@ -1,9 +1,9 @@
 import { Button } from "@mantine/core";
 import React from "react";
 import { Occasion } from "../../../../api/src/controllers/occassions.controller";
-import AddOccassionDialog from "../../components/add-occassion-dialog";
-import OccasionsTable from "../../components/occassions-table/OccassionsTable";
-import useGetOccasion from "../../hooks/use-get-occasion";
+import AddOccassionDialog from "./components/add-occassion-dialog";
+import OccasionsTable from "./components/occassions-table/OccassionsTable";
+import useGetOccasion from "./hooks/use-get-occasion";
 import styles from "./index.module.css";
 
 const Occassions = () => {

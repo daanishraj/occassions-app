@@ -1,7 +1,7 @@
 import { Table } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
-import { Occasion } from "../../../../api/src/controllers/occassions.controller";
-import OccassionsService from "../../services/Occassions.service";
+import { Occasion } from "../../../../../../api/src/controllers/occassions.controller";
+import OccassionsService from "../../../../services/Occassions.service";
 
 const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
   const onRemoveOccassion = async (id: string) => {

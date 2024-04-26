@@ -1,14 +1,10 @@
 import { Table } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { Occasion } from "../../../../../../api/src/controllers/occassions.controller";
-import OccassionsService from "../../../../services/Occassions.service";
+import useDeleteOccasion from "../../hooks/use-delete-occasion";
 
 const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
-  const onRemoveOccassion = async (id: string) => {
-    await OccassionsService.deleteOccassion(id);
-    //TODO: handle updating of the state on the FE
-    await OccassionsService.getOccassions();
-  };
+  const { deleteOccasion } = useDeleteOccasion();
 
   const onEditOccassion = async () => {
     console.log("edit this row");
@@ -22,7 +18,7 @@ const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
       <Table.Td>{occassion.day}</Table.Td>
       <Table.Td>
         <IconEdit onClick={onEditOccassion} />
-        <IconTrash onClick={() => onRemoveOccassion(occassion.id)} />
+        <IconTrash onClick={() => deleteOccasion(occassion.id)} />
       </Table.Td>
     </Table.Tr>
   ));

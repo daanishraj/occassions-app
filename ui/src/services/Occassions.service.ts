@@ -14,8 +14,6 @@ const addOccassion = async (occassion: AddOccasion): Promise<Occasion> => {
 };
 
 const deleteOccassion = async (id: string): Promise<AxiosResponse> => {
-  console.log("inside delete occassions service - fe");
-
   const response = await Api().delete(`${route}/${id}`);
   return response;
 };

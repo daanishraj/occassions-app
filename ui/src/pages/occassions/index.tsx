@@ -57,7 +57,6 @@ const Occassions = () => {
   };
 
   const sortedOccasions = React.useMemo(() => {
-    console.log("inside useMemo");
     return [...filteredOccassions].sort((a, b) => {
       const indexA = selectMonthOptions.indexOf(a.month);
       const indexB = selectMonthOptions.indexOf(b.month);

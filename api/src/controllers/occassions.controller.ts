@@ -105,6 +105,41 @@ let data: Occasion[] = [
     month: Month.DECEMBER,
     day: 24,
   },
+  {
+    id: uuidV4(),
+    name: "Parents",
+    occasionType: OccasionType.ANNIVERSARY,
+    month: Month.MAY,
+    day: 9,
+  },
+  {
+    id: uuidV4(),
+    name: "Tassia Sidarto",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.MARCH,
+    day: 23,
+  },
+  {
+    id: uuidV4(),
+    name: "Lakshay Sharma",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.MARCH,
+    day: 23,
+  },
+  {
+    id: uuidV4(),
+    name: "Farida Raj",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.FEBRUARY,
+    day: 25,
+  },
+  {
+    id: uuidV4(),
+    name: "Samira Raj",
+    occasionType: OccasionType.BIRTHDAY,
+    month: Month.JUNE,
+    day: 24,
+  },
 ];
 
 // TODO: fix this

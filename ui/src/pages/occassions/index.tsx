@@ -11,20 +11,7 @@ const Occassions = () => {
   const [filteredOccassions, setFilteredOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
   const { data, isLoading, isError, error } = useGetOccasion();
-  const selectMonthOptions = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const selectMonthOptions: string[] = React.useMemo(() => Object.values(Month), []);
   const [filteredMonth, setFilteredMonth] = React.useState<Month | null>();
   const [searchText, setSearchText] = React.useState<string>("");
 
@@ -69,6 +56,16 @@ const Occassions = () => {
     setFilteredOccassions(filteredItems);
   };
 
+  const sortedOccasions = React.useMemo(() => {
+    console.log("inside useMemo");
+    return [...filteredOccassions].sort((a, b) => {
+      const indexA = selectMonthOptions.indexOf(a.month);
+      const indexB = selectMonthOptions.indexOf(b.month);
+
+      return indexA - indexB;
+    });
+  }, [filteredOccassions, selectMonthOptions]);
+
   if (isError) {
     return (
       <div className={styles.container}>
@@ -110,7 +107,7 @@ const Occassions = () => {
         </div>
         <AddOccassionDialog opened={addOccassion} onClose={onCloseAddDialog} />
         <div className={styles.tableContainer}>
-          <OccasionsTable occassions={filteredOccassions} />
+          <OccasionsTable occassions={sortedOccasions} />
         </div>
       </div>
     </>

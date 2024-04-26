@@ -65,6 +65,7 @@ const UserInfo = () => {
         placeholder="Full name"
         key={form.key("fullName")}
         {...form.getInputProps("fullName")}
+        withAsterisk
       />
       <TextInput
         className={styles.email}
@@ -73,6 +74,7 @@ const UserInfo = () => {
         placeholder="Email"
         key={form.key("email")}
         {...form.getInputProps("email")}
+        withAsterisk
       />
       <TextInput
         className={styles.phone}

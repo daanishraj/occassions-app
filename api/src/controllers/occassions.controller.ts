@@ -74,7 +74,7 @@ let data: Occasion[] = [
     id: uuidV4(),
     name: "PY",
     occasionType: OccasionType.BIRTHDAY,
-    day: 1,
+    day: 5,
     month: Month.JANUARY,
   },
   {

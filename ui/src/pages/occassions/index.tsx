@@ -1,6 +1,6 @@
-import { Button } from "@mantine/core";
+import { Button, Select, TextInput } from "@mantine/core";
 import React from "react";
-import { Occasion } from "../../../../api/src/controllers/occassions.controller";
+import { Month, Occasion } from "../../../../api/src/controllers/occassions.controller";
 import AddOccassionDialog from "./components/add-occassion-dialog";
 import OccasionsTable from "./components/occassions-table/OccassionsTable";
 import useGetOccasion from "./hooks/use-get-occasion";
@@ -8,23 +8,66 @@ import styles from "./index.module.css";
 
 const Occassions = () => {
   const [occassions, setOccassions] = React.useState<Occasion[]>([]);
+  const [filteredOccassions, setFilteredOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
   const { data, isLoading, isError, error } = useGetOccasion();
+  const selectMonthOptions = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const [filteredMonth, setFilteredMonth] = React.useState<Month | null>();
+  const [searchText, setSearchText] = React.useState<string>("");
 
   React.useEffect(() => {
     if (data) {
       setOccassions(data);
+      if (!(filteredMonth || searchText)) {
+        setFilteredOccassions(data);
+      }
     }
-  }, [data]);
+  }, [data, filteredMonth, searchText]);
 
   const onCloseAddDialog = () => setAddOccassion(false);
 
-  const handleClick = () => {
-    console.log("create a new occasion..");
+  const handleAdd = () => {
     setAddOccassion(true);
   };
 
-  console.log({ occassions });
+  const onFilterMonth = (monthValue: string | null) => {
+    let filteredItems: Occasion[];
+    filteredItems = occassions.filter((occasion: Occasion) =>
+      occasion.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+    if (monthValue) {
+      filteredItems = filteredItems.filter((occasion: Occasion) => occasion.month === monthValue);
+    }
+    const userSelection = monthValue ? (monthValue as Month) : null;
+    setFilteredMonth(userSelection);
+    setFilteredOccassions(filteredItems);
+  };
+
+  const onFilterByName = (searchText: string) => {
+    let filteredItems: Occasion[];
+    filteredItems = occassions.filter((occasion: Occasion) =>
+      occasion.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+    if (filteredMonth) {
+      filteredItems = filteredItems.filter((occasion: Occasion) => occasion.month === filteredMonth);
+    }
+
+    setSearchText(searchText);
+    setFilteredOccassions(filteredItems);
+  };
 
   if (isError) {
     return (
@@ -46,12 +89,28 @@ const Occassions = () => {
   return (
     <>
       <div className={styles.container}>
-        <Button className={styles.button} variant="filled" onClick={handleClick}>
-          Add
-        </Button>
+        <div className={styles.searchAndAddContainer}>
+          <Select
+            placeholder="search by month.."
+            data={selectMonthOptions}
+            value={filteredMonth}
+            onChange={onFilterMonth}
+            radius="lg"
+            clearable
+          />
+          <TextInput
+            placeholder="search by name.."
+            onChange={(event) => onFilterByName(event?.currentTarget.value)}
+            value={searchText}
+            radius="lg"
+          />
+          <Button className={styles.addButton} radius="md" variant="filled" onClick={handleAdd}>
+            Add
+          </Button>
+        </div>
         <AddOccassionDialog opened={addOccassion} onClose={onCloseAddDialog} />
         <div className={styles.tableContainer}>
-          <OccasionsTable occassions={occassions} />
+          <OccasionsTable occassions={filteredOccassions} />
         </div>
       </div>
     </>

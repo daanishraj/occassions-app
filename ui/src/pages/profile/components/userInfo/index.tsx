@@ -60,7 +60,6 @@ const UserInfo = () => {
   return (
     <form className={styles.form} onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
-        className={styles.input}
         label="Full name"
         placeholder="Full name"
         key={form.key("fullName")}
@@ -68,7 +67,6 @@ const UserInfo = () => {
         withAsterisk
       />
       <TextInput
-        className={styles.email}
         mt="sm"
         label="Email"
         placeholder="Email"
@@ -77,7 +75,6 @@ const UserInfo = () => {
         withAsterisk
       />
       <TextInput
-        className={styles.phone}
         mt="sm"
         label="Whatsapp Number"
         placeholder="ex. +4917642177411"

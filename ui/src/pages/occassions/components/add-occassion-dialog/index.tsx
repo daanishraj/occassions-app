@@ -1,4 +1,4 @@
-import { Button, Modal, Select, TextInput } from "@mantine/core";
+import { Button, Flex, Modal, Select, TextInput } from "@mantine/core";
 import React from "react";
 import {
   AddOccasion,
@@ -7,6 +7,7 @@ import {
   OccasionType,
 } from "../../../../../../api/src/controllers/occassions.controller";
 import useCreateOccasion from "../../hooks/use-create-occasion";
+import styles from "./styles.module.css";
 
 type Props = {
   opened: boolean;
@@ -34,7 +35,7 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     }
   };
 
-  const onChangeName = (value: string | undefined) => value && setNewOccasion({ ...newOccassion, name: value });
+  const onChangeName = (value: string | undefined) => setNewOccasion({ ...newOccassion, name: value });
 
   const onSelectMonth = (value: string | null) => {
     if (value) {
@@ -84,40 +85,46 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     addOccasion(newOccassion as AddOccasion);
   };
   return (
-    <Modal opened={opened} onClose={onClose} title={ADD_DIALOG_TITLE}>
+    <Modal opened={opened} onClose={onClose} title={ADD_DIALOG_TITLE} size="xs">
       {/*Todo: Conditionally render error prop - form validation */}
-      <TextInput
-        size="xs"
-        label="Name"
-        placeholder="John Doe"
-        withAsterisk
-        onChange={(event) => onChangeName(event?.currentTarget.value)}
-        value={newOccassion.name}
-      />
-      <Select
-        label="Select Occassion Type"
-        placeholder="birthday"
-        data={selectOccassionOptions}
-        value={newOccassion.occasionType}
-        onChange={onSelectOccassion}
-        defaultValue={null}
-      />
-      <Select
-        label="Select Month"
-        placeholder="January"
-        data={selectMonthOptions}
-        value={newOccassion.month}
-        onChange={onSelectMonth}
-      />
-      {/* Validation - user should not be able to select February 30th */}
-      <Select
-        label="Select Day"
-        placeholder="1"
-        data={dayOptions}
-        value={newOccassion.day?.toString()}
-        onChange={onSelectDay}
-      />
+      <Flex direction="column" rowGap="lg">
+        <TextInput
+          size="sm"
+          label="Name"
+          placeholder="John Doe"
+          withAsterisk
+          onChange={(event) => onChangeName(event?.currentTarget.value)}
+          value={newOccassion.name}
+        />
+        <Select
+          label="Select Occassion Type"
+          placeholder="birthday"
+          data={selectOccassionOptions}
+          value={newOccassion.occasionType}
+          onChange={onSelectOccassion}
+          defaultValue={null}
+          withAsterisk
+        />
+        <Select
+          label="Select Month"
+          placeholder="January"
+          data={selectMonthOptions}
+          value={newOccassion.month}
+          onChange={onSelectMonth}
+          withAsterisk
+        />
+        {/* TODO: Validation - user should not be able to select February 30th */}
+        <Select
+          label="Select Day"
+          placeholder="1"
+          data={dayOptions}
+          value={newOccassion.day?.toString()}
+          onChange={onSelectDay}
+          withAsterisk
+        />
+      </Flex>
       <Button
+        className={styles.addButton}
         disabled={!(newOccassion.day && newOccassion.month && newOccassion.name && newOccassion.occasionType)}
         onClick={handleAdd}
       >

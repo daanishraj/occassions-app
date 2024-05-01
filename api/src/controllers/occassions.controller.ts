@@ -17,37 +17,37 @@ export enum Month {
 }
 
 export type DaysofMonth =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20
-  | 21
-  | 22
-  | 23
-  | 24
-  | 25
-  | 26
-  | 27
-  | 28
-  | 29
-  | 30
-  | 31;
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "11"
+  | "12"
+  | "13"
+  | "14"
+  | "15"
+  | "16"
+  | "17"
+  | "18"
+  | "19"
+  | "20"
+  | "21"
+  | "22"
+  | "23"
+  | "24"
+  | "25"
+  | "26"
+  | "27"
+  | "28"
+  | "29"
+  | "30"
+  | "31";
 
 export enum OccasionType {
   BIRTHDAY = "birthday",
@@ -74,7 +74,7 @@ let data: Occasion[] = [
     id: uuidV4(),
     name: "PY",
     occasionType: OccasionType.BIRTHDAY,
-    day: 5,
+    day: "5",
     month: Month.JANUARY,
   },
   {
@@ -82,63 +82,63 @@ let data: Occasion[] = [
     name: "Sri Yukteswar",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.MAY,
-    day: 10,
+    day: "10",
   },
   {
     id: uuidV4(),
     name: "Gigi Bartha",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.DECEMBER,
-    day: 31,
+    day: "31",
   },
   {
     id: uuidV4(),
     name: "Oliver Guenay",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.NOVEMBER,
-    day: 17,
+    day: "17",
   },
   {
     id: uuidV4(),
     name: "Sophia Waldvogel",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.DECEMBER,
-    day: 24,
+    day: "24",
   },
   {
     id: uuidV4(),
     name: "Parents",
     occasionType: OccasionType.ANNIVERSARY,
     month: Month.MAY,
-    day: 9,
+    day: "9",
   },
   {
     id: uuidV4(),
     name: "Tassia Sidarto",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.MARCH,
-    day: 23,
+    day: "23",
   },
   {
     id: uuidV4(),
     name: "Lakshay Sharma",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.MARCH,
-    day: 23,
+    day: "23",
   },
   {
     id: uuidV4(),
     name: "Farida Raj",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.FEBRUARY,
-    day: 25,
+    day: "25",
   },
   {
     id: uuidV4(),
     name: "Samira Raj",
     occasionType: OccasionType.BIRTHDAY,
     month: Month.JUNE,
-    day: 24,
+    day: "24",
   },
 ];
 

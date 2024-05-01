@@ -7,6 +7,7 @@ import {
   OccasionType,
 } from "../../../../../../api/src/controllers/occassions.controller";
 import useCreateOccasion from "../../hooks/use-create-occasion";
+import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -23,9 +24,7 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     name: "",
   });
 
-  const [dayOptions, setDayOptions] = React.useState<string[]>(
-    Array.from({ length: 31 }, (_, index) => String(index + 1)),
-  );
+  const [dayOptions, setDayOptions] = React.useState<string[]>(selectDayOptions);
 
   const { addOccasion } = useCreateOccasion({ setNewOccasion, onClose });
 
@@ -62,24 +61,7 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     }
   };
 
-  const onSelectDay = (value: string | null) =>
-    value && setNewOccasion({ ...newOccassion, day: parseInt(value) as DaysofMonth });
-
-  const selectOccassionOptions: string[] = Object.values(OccasionType) as string[];
-  const selectMonthOptions = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const onSelectDay = (value: string | null) => value && setNewOccasion({ ...newOccassion, day: value as DaysofMonth });
 
   const handleAdd = async () => {
     addOccasion(newOccassion as AddOccasion);

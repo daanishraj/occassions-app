@@ -1,24 +1,30 @@
 import { Table } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
+import React from "react";
 import { Occasion } from "../../../../../../api/src/controllers/occassions.controller";
 import useDeleteOccasion from "../../hooks/use-delete-occasion";
+import EditOccasionDialog from "../edit-occasion-dialog";
 
 const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
+  const [selectedOccasionForEdit, setSelectedOccasionForEdit] = React.useState<Occasion | null>(null);
   const { deleteOccasion } = useDeleteOccasion();
 
-  const onEditOccassion = async () => {
-    console.log("edit this row");
+  const onEditOccassion = async (occasion: Occasion) => {
+    setSelectedOccasionForEdit(occasion);
   };
 
-  const rows = occassions.map((occassion: Occasion) => (
-    <Table.Tr key={occassion.id}>
-      <Table.Td>{occassion.name}</Table.Td>
-      <Table.Td>{occassion.occasionType}</Table.Td>
-      <Table.Td>{occassion.month}</Table.Td>
-      <Table.Td>{occassion.day}</Table.Td>
+  const onFinishEditing = () => {
+    setSelectedOccasionForEdit(null);
+  };
+  const rows = occassions.map(({ id, name, occasionType, month, day }: Occasion) => (
+    <Table.Tr key={id}>
+      <Table.Td>{name}</Table.Td>
+      <Table.Td>{occasionType}</Table.Td>
+      <Table.Td>{month}</Table.Td>
+      <Table.Td>{day}</Table.Td>
       <Table.Td>
-        <IconEdit onClick={onEditOccassion} />
-        <IconTrash onClick={() => deleteOccasion(occassion.id)} />
+        <IconEdit onClick={() => onEditOccassion({ id, name, occasionType, month, day })} />
+        <IconTrash onClick={() => deleteOccasion(id)} />
       </Table.Td>
     </Table.Tr>
   ));
@@ -35,6 +41,7 @@ const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>
+      {selectedOccasionForEdit && <EditOccasionDialog occasion={selectedOccasionForEdit} onClose={onFinishEditing} />}
     </Table>
   );
 };

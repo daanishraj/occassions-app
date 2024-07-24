@@ -3,8 +3,13 @@ import Api from "../../../services/Api";
 
 const route = "/profile";
 
+console.log('inside profile service..');
+
 const getProfile = async () => {
+  const resp = Api();
+  console.log({resp});
   const response = await Api().get(route);
+  console.log( { response })
   return response.data;
 };
 

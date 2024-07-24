@@ -5,6 +5,7 @@ import { QueryKeys } from "../../../types";
 import ProfileService from "../services/Profile.service";
 
 const useGetProfile = () => {
+  console.log('inside useGetProfile..');
   const { data, isLoading, isError, error } = useQuery<Profile, AxiosError>({
     queryKey: [QueryKeys.PROFILE],
     queryFn: ProfileService.getProfile,

@@ -7,6 +7,7 @@ import useGetProfile from "../../hooks/use-get-profile";
 import styles from "./styles.module.css";
 
 const UserInfo = () => {
+  
   const { data, isLoading, isError, error } = useGetProfile();
   const { editProfile } = useEditProfile();
   const isValidPhoneNumber = (number: string | undefined) => {
@@ -38,6 +39,11 @@ const UserInfo = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  React.useEffect (() => {
+    console.log ('render UserInfo - profile page component')
+
+  })
 
   const handleSubmit = (values: typeof form.values) => {
     console.log(values);

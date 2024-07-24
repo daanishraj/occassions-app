@@ -5,7 +5,10 @@ import Api from "./Api";
 const route = "/occassions";
 
 const getOccassions = async (): Promise<Occasion[]> => {
+  const resp = Api();
+  console.log({resp});
   const response = await Api().get(route);
+  console.log(response);
   return response.data;
 };
 const addOccassion = async (occassion: AddOccasion): Promise<Occasion> => {

@@ -6,7 +6,7 @@ import useEditProfile from "../../hooks/use-edit-profile";
 import useGetProfile from "../../hooks/use-get-profile";
 import styles from "./styles.module.css";
 
-const UserInfo = () => {
+const CustomUserInfo = () => {
   
   const { data, isLoading, isError, error } = useGetProfile();
   const { editProfile } = useEditProfile();
@@ -94,4 +94,4 @@ const UserInfo = () => {
   );
 };
 
-export default UserInfo;
+export default CustomUserInfo;

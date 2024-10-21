@@ -1,6 +1,8 @@
+import { SignedIn } from "@clerk/clerk-react";
 import { Button, Select, TextInput } from "@mantine/core";
 import React from "react";
 import { Month, Occasion } from "../../../../api/src/controllers/occassions.controller";
+import Profile from "../profile";
 import AddOccassionDialog from "./components/add-occassion-dialog";
 import OccasionsTable from "./components/occassions-table/OccassionsTable";
 import useGetOccasion from "./hooks/use-get-occasion";
@@ -84,6 +86,8 @@ const Occassions = () => {
 
   return (
     <>
+    <SignedIn>
+      <Profile/>
       <div className={styles.container}>
         <div className={styles.searchAndAddContainer}>
           <Select
@@ -109,6 +113,7 @@ const Occassions = () => {
           <OccasionsTable occassions={sortedOccasions} />
         </div>
       </div>
+      </SignedIn>
     </>
   );
 };

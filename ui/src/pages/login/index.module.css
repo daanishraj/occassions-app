@@ -1,0 +1,26 @@
+html,
+body {
+ height: 100%; /* Ensure that the body takes up the full height of the viewport */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /*remove unnecessary scrolling */ 
+} 
+
+ /* body > div {
+  height: 100%;
+}  */
+
+/* TODO:  fix these styles - sign up modal should be centered l,r,t,b*/
+
+.container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    height: 100vh;
+}
+
+
+:global(.cl-signUp-root) {
+    /* margin-top: 150px; */
+    /* margin-bottom: 150px; */
+}

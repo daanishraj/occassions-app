@@ -1,8 +1,13 @@
-import UserInfo from "./components/userInfo";
+import UserInfo from "./components/clerk-user-info";
+import styles from './styles.module.css';
+
 
 const Profile = () => {
-  console.log('inside Profile component');
-  return <UserInfo />;
+  return (
+  <div className={styles.avatar}>
+    <UserInfo />
+  </div>
+  )
 };
 
 export default Profile;

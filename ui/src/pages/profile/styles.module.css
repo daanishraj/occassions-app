@@ -1,0 +1,11 @@
+.avatar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+
+/*TODO: start using scss*/
+  .avatar :global(.cl-avatarBox) {
+    width: 40px;
+    height: 40px;
+}

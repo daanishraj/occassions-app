@@ -1,14 +1,15 @@
-import { SignedIn } from "@clerk/clerk-react";
+import { SignedIn, useAuth } from "@clerk/clerk-react";
 import { Button, Select, TextInput } from "@mantine/core";
 import React from "react";
-import { Month, Occasion } from "../../../../api/src/controllers/occassions.controller";
+import { Month, Occasion } from "../../../../api/src/controllers/occasions.controller";
 import Profile from "../profile";
-import AddOccassionDialog from "./components/add-occassion-dialog";
+import AddOccasionDialog from "./components/add-occassion-dialog";
 import OccasionsTable from "./components/occassions-table/OccassionsTable";
 import useGetOccasion from "./hooks/use-get-occasion";
 import styles from "./index.module.css";
 
 const Occassions = () => {
+  const {userId, isLoaded} = useAuth();
   const [occassions, setOccassions] = React.useState<Occasion[]>([]);
   const [filteredOccassions, setFilteredOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
@@ -76,10 +77,15 @@ const Occassions = () => {
     );
   }
 
+  if (!isLoaded) {
+    return (
+      <div>Try signing in again</div>
+    )
+  }
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <div>Fetching data..</div>;
+        <div>Fetching data...</div>
       </div>
     );
   }
@@ -108,9 +114,9 @@ const Occassions = () => {
             Add
           </Button>
         </div>
-        <AddOccassionDialog opened={addOccassion} onClose={onCloseAddDialog} />
+        <AddOccasionDialog opened={addOccassion} onClose={onCloseAddDialog} userId={userId!} />
         <div className={styles.tableContainer}>
-          <OccasionsTable occassions={sortedOccasions} />
+          <OccasionsTable occassions={sortedOccasions} userId={userId!} />
         </div>
       </div>
       </SignedIn>

@@ -1,28 +1,28 @@
 import { AxiosResponse } from "axios";
-import { AddOccasion, Occasion } from "../../../api/src/controllers/occassions.controller";
+import { AddOccasion, Occasion } from "../../../api/src/controllers/occasions.controller";
 import Api from "./Api";
 
-const route = "/occassions";
+const route = "/occasions";
 
-const getOccassions = async (): Promise<Occasion[]> => {
+const getOccasions = async (): Promise<Occasion[]> => {
   const resp = Api();
   console.log({resp});
   const response = await Api().get(route);
   console.log(response);
   return response.data;
 };
-const addOccassion = async (occassion: AddOccasion): Promise<Occasion> => {
+const addOccasion = async (occassion: AddOccasion): Promise<Occasion> => {
   const response = await Api().post(route, occassion);
   return response.data;
 };
 
-const deleteOccassion = async (id: string): Promise<AxiosResponse> => {
+const deleteOccasion = async (id: string): Promise<AxiosResponse> => {
   const response = await Api().delete(`${route}/${id}`);
   return response;
 };
 
 export default {
-  getOccassions,
-  addOccassion,
-  deleteOccassion,
+  getOccasions,
+  addOccasion,
+  deleteOccasion,
 };

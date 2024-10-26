@@ -1,11 +1,16 @@
 import { Table } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React from "react";
-import { Occasion } from "../../../../../../api/src/controllers/occassions.controller";
+import { Occasion } from "../../../../../../api/src/controllers/occasions.controller";
 import useDeleteOccasion from "../../hooks/use-delete-occasion";
 import EditOccasionDialog from "../edit-occasion-dialog";
 
-const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
+type Props = {
+  userId: string;
+  occassions: Occasion[];
+}
+
+const OccasionsTable = ({ occassions, userId }: Props) => {
   const [selectedOccasionForEdit, setSelectedOccasionForEdit] = React.useState<Occasion | null>(null);
   const { deleteOccasion } = useDeleteOccasion();
 
@@ -23,7 +28,7 @@ const OccasionsTable = ({ occassions }: { occassions: Occasion[] }) => {
       <Table.Td>{month}</Table.Td>
       <Table.Td>{day}</Table.Td>
       <Table.Td>
-        <IconEdit onClick={() => onEditOccassion({ id, name, occasionType, month, day })} />
+        <IconEdit onClick={() => onEditOccassion({ userId, id, name, occasionType, month, day })} />
         <IconTrash onClick={() => deleteOccasion(id)} />
       </Table.Td>
     </Table.Tr>

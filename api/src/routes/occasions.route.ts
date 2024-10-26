@@ -1,4 +1,4 @@
-import { occasionsController } from "@/controllers/occassions.controller";
+import { occasionsController } from "@/controllers/occasions.controller";
 import express from "express";
 
 const router = express.Router();

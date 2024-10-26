@@ -1,2 +1,3 @@
-export * from "./occassions.controller";
+export * from "./occasions.controller";
 export * from "./profile.controller";
+

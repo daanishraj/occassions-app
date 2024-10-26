@@ -12,7 +12,7 @@ const useCreateOccasion = ({ setNewOccasion, onClose }: TProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isError, isPending, isSuccess } = useMutation({
-    mutationFn: OccassionsService.addOccassion,
+    mutationFn: OccassionsService.addOccasion,
     onSuccess: () => {
       setNewOccasion({ name: "" });
       onClose();

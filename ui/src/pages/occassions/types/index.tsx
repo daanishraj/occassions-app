@@ -1,19 +1,6 @@
-import { OccasionType } from "../../../../../api/src/controllers/occassions.controller";
+import { Month, OccasionType } from "../../../../../api/src/controllers/occasions.controller";
 
-export const selectMonthOptions = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+export const selectMonthOptions : string[] = Object.values(Month) as string[]
 
 export const selectDayOptions = Array.from({ length: 31 }, (_, index) => String(index + 1));
 

@@ -1,7 +1,7 @@
 import { Button, Flex, Modal, Select, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import React from "react";
-import { Month, Occasion } from "../../../../../../api/src/controllers/occassions.controller";
+import { Month, Occasion } from "../../../../../../api/src/controllers/occasions.controller";
 import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";
 import styles from "./styles.module.css";
 
@@ -14,7 +14,7 @@ type TProps = {
 
 const EditOccasionDialog: React.FC<TProps> = ({ occasion, onClose }: TProps) => {
   const [dayOptions, setDayOptions] = React.useState<string[]>(selectDayOptions);
-  const form = useForm<Omit<Occasion, "id">>({
+  const form = useForm<Omit<Occasion, "id" | "userId">>({
     mode: "controlled",
     validateInputOnChange: true,
     initialValues: {

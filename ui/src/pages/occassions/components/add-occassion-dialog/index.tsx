@@ -2,15 +2,15 @@ import { Button, Flex, Modal, Select, TextInput } from "@mantine/core";
 import React from "react";
 import {
   AddOccasion,
-  DaysofMonth,
   Month,
-  OccasionType,
-} from "../../../../../../api/src/controllers/occassions.controller";
+  OccasionType
+} from "../../../../../../api/src/controllers/occasions.controller";
 import useCreateOccasion from "../../hooks/use-create-occasion";
 import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";
 import styles from "./styles.module.css";
 
 type Props = {
+  userId: string;
   opened: boolean;
   onClose: () => void;
 };
@@ -19,7 +19,7 @@ export type NewOccasion = Partial<AddOccasion>;
 
 const ADD_DIALOG_TITLE = "Add an Occassion";
 
-const AddOccassionDialog = ({ opened, onClose }: Props) => {
+const AddOccasionDialog = ({ opened, onClose, userId }: Props) => {
   const [newOccassion, setNewOccasion] = React.useState<NewOccasion>({
     name: "",
   });
@@ -61,11 +61,13 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
     }
   };
 
-  const onSelectDay = (value: string | null) => value && setNewOccasion({ ...newOccassion, day: value as DaysofMonth });
+  const onSelectDay = (value: string | null) => value && setNewOccasion({ ...newOccassion, day: Number(value) });
 
   const handleAdd = async () => {
-    addOccasion(newOccassion as AddOccasion);
+    console.log({newOccassion});
+    addOccasion({...newOccassion, userId, day: Number(newOccassion.day) } as AddOccasion);
   };
+
   return (
     <Modal opened={opened} onClose={onClose} title={ADD_DIALOG_TITLE} size="xs">
       {/*Todo: Conditionally render error prop - form validation */}
@@ -116,4 +118,4 @@ const AddOccassionDialog = ({ opened, onClose }: Props) => {
   );
 };
 
-export default AddOccassionDialog;
+export default AddOccasionDialog;

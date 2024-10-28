@@ -64,7 +64,6 @@ const AddOccasionDialog = ({ opened, onClose, userId }: Props) => {
   const onSelectDay = (value: string | null) => value && setNewOccasion({ ...newOccassion, day: Number(value) });
 
   const handleAdd = async () => {
-    console.log({newOccassion});
     addOccasion({...newOccassion, userId, day: Number(newOccassion.day) } as AddOccasion);
   };
 

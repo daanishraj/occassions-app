@@ -44,33 +44,21 @@ const AddOccasionSchema = z.object({
 export type Occasion = z.infer<typeof OccasionSchema>;
 export type AddOccasion = z.infer<typeof AddOccasionSchema>;
 
-let data: Occasion[] = [
-  {
-    id: uuidV4(),
-    userId: uuidV4(),
-    name: "PY",
-    occasionType: OccasionType.BIRTHDAY,
-    day: 5,
-    month: Month.JANUARY,
-  },
-  {
-    id: uuidV4(),
-    userId: uuidV4(),
-    name: "Sri Yukteswar",
-    occasionType: OccasionType.BIRTHDAY,
-    month: Month.MAY,
-    day: 10,
-  },
-]
-
 const prisma = new PrismaClient()
 
 // TODO: fix this
 // @ts-ignore
 const getOccasions = async (req: Request, res: Response) => {
   console.log('backend - making  a GET request');
-  console.log(req.body);
-  const occasions = await prisma.occasion.findMany()
+  const userId = req.headers.authorization?.split(" ")[1]; // Extract userId from Authorization header
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: userId is missing" });
+  }
+  const occasions = await prisma.occasion.findMany({
+    where: {
+      userId
+    }
+  })
   res.status(200).send(occasions);
 };
 

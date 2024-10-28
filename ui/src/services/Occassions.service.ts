@@ -4,11 +4,12 @@ import Api from "./Api";
 
 const route = "/occasions";
 
-const getOccasions = async (): Promise<Occasion[]> => {
-  const resp = Api();
-  console.log({resp});
-  const response = await Api().get(route);
-  console.log(response);
+const getOccasions = async (userId: string): Promise<Occasion[]> => {
+  const response = await Api().get(route, {
+    headers: {
+      Authorization: `Bearer ${userId}`
+    }
+  });
   return response.data;
 };
 const addOccasion = async (occassion: AddOccasion): Promise<Occasion> => {

@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { AddOccasion, Occasion } from "../../../api/src/controllers/occasions.controller";
+import { AddOccasion, EditOccasion, Occasion } from "../../../api/src/controllers/occasions.controller";
 import Api from "./Api";
 
 const route = "/occasions";
@@ -17,6 +17,15 @@ const addOccasion = async (occassion: AddOccasion): Promise<Occasion> => {
   return response.data;
 };
 
+const editOccasion = async (id:string, userId: string, payload: EditOccasion): Promise<Occasion> => {
+  const response = await Api().put(`${route}/${id}`, payload, {
+    headers: {
+      Authorization: `Bearer ${userId}`
+    }
+  })
+  return response.data;
+};
+
 const deleteOccasion = async (id: string): Promise<AxiosResponse> => {
   const response = await Api().delete(`${route}/${id}`);
   return response;
@@ -25,5 +34,6 @@ const deleteOccasion = async (id: string): Promise<AxiosResponse> => {
 export default {
   getOccasions,
   addOccasion,
+  editOccasion,
   deleteOccasion,
 };

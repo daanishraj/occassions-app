@@ -13,9 +13,10 @@ type Props = {
 const OccasionsTable = ({ occassions, userId }: Props) => {
   const [selectedOccasionForEdit, setSelectedOccasionForEdit] = React.useState<Occasion | null>(null);
   const { deleteOccasion } = useDeleteOccasion();
+  
 
   const onEditOccassion = async (occasion: Occasion) => {
-    setSelectedOccasionForEdit(occasion);
+    setSelectedOccasionForEdit(occasion)
   };
 
   const onFinishEditing = () => {
@@ -28,7 +29,7 @@ const OccasionsTable = ({ occassions, userId }: Props) => {
       <Table.Td>{month}</Table.Td>
       <Table.Td>{day}</Table.Td>
       <Table.Td>
-        <IconEdit onClick={() => onEditOccassion({ userId, id, name, occasionType, month, day })} />
+        <IconEdit onClick={() => onEditOccassion({ id, userId, name, occasionType, month, day })}/>
         <IconTrash onClick={() => deleteOccasion(id)} />
       </Table.Td>
     </Table.Tr>

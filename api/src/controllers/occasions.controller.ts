@@ -40,8 +40,16 @@ const AddOccasionSchema = z.object({
   day: z.number().int().min(1).max(31), 
 });
 
+const EditOccasionSchema =  z.object({
+  name: z.string(),
+  occasionType: z.nativeEnum(OccasionType),
+  month: z.nativeEnum(Month),
+  day: z.number().int().min(1).max(31), 
+});
+
 export type Occasion = z.infer<typeof OccasionSchema>;
 export type AddOccasion = z.infer<typeof AddOccasionSchema>;
+export type EditOccasion = z.infer<typeof EditOccasionSchema>;
 
 const prisma = new PrismaClient()
 
@@ -82,6 +90,43 @@ const addOccasion = async (req: Request, res: Response) => {
   res.json(newOccasion);
 };
 
+const editOccasion = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const parseResult = EditOccasionSchema.safeParse(req.body);
+  
+  if (!parseResult.success) {
+    return res.status(400).json({ error: "Some fields are missing or incorrect", details: parseResult.error.errors });
+  }
+
+  const { name, occasionType, month, day } = parseResult.data;
+
+  try {
+    const existingOccasion = await prisma.occasion.findUnique({
+      where: { id },
+    });
+    
+    if (!existingOccasion) {
+      return res.status(404).json({ error: "Occasion not found" });
+    }
+
+    const updatedOccasion = await prisma.occasion.update({
+      where: { id },
+      data: {
+        name,
+        occasionType,
+        month,
+        day,
+      },
+    });
+
+    res.json(updatedOccasion);
+  } catch (error) {
+    console.error("Error updating occasion:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 const deleteOccasion = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
@@ -106,6 +151,7 @@ const deleteOccasion = async (req: Request, res: Response) => {
 
 export const occasionsController = {
   getOccasions,
-  deleteOccasion,
   addOccasion,
+  editOccasion,
+  deleteOccasion,
 };

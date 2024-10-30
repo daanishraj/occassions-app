@@ -2,7 +2,7 @@ import { Button, Flex, Modal, Select, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import React from "react";
 import { Month, Occasion } from "../../../../../../api/src/controllers/occasions.controller";
-import useEditOccasion, { RequestEditOccasion } from "../../hooks/use-edit-occasion";
+import useEditOccasion from "../../hooks/use-edit-occasion";
 import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";
 import styles from "./styles.module.css";
 
@@ -13,18 +13,22 @@ type TProps = {
   onClose: () => void;
 };
 
+type EditOccasionForm = Omit<Occasion, "userId" | "id" | "day"> & {
+  day: string;
+};
+
 const EditOccasionDialog: React.FC<TProps> = ({ occasion, onClose }: TProps) => {
   const [dayOptions, setDayOptions] = React.useState<string[]>(selectDayOptions);
   const { editOccasion } = useEditOccasion(onClose);
   
-  const form = useForm<RequestEditOccasion['payload']>({
+  const form = useForm<EditOccasionForm>({
     mode: "controlled",
     validateInputOnChange: true,
     initialValues: {
       name: occasion.name,
       occasionType: occasion.occasionType,
       month: occasion.month,
-      day: occasion.day,
+      day: String(occasion.day),
     },
     onValuesChange(values) {
       console.log({ values });
@@ -95,12 +99,7 @@ const EditOccasionDialog: React.FC<TProps> = ({ occasion, onClose }: TProps) => 
             placeholder="1"
             key={form.key("day")}
             data={dayOptions}
-            // value={String(form.values.day)} // Convert day to string for the Select component
-            // value='21' // Convert day to string for the Select component
-            {...form.getInputProps("day", {
-              onChange: (value: string) => form.setFieldValue("day", Number(value)), // Convert to number within `getInputProps`
-              value: String(form.values.day)
-            })}
+            {...form.getInputProps("day")}
             withAsterisk
           />
         </Flex>

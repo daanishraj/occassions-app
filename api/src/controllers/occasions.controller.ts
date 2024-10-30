@@ -22,7 +22,6 @@ export enum OccasionType {
   ANNIVERSARY= "Anniversary",
 }
 
-// Define schemas here for validation
 const OccasionSchema = z.object({
   id: z.string(),
   userId: z.string(),

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { EditOccasion, Occasion } from "../../../../../api/src/controllers/occasions.controller";
+import { EditOccasion, Occasion } from "../../../../../api/src/validation";
 import OccassionsService from "../../../services/Occassions.service";
 import { QueryKeys } from "../../../types";
 

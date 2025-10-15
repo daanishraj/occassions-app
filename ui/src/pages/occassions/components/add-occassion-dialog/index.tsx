@@ -4,7 +4,7 @@ import {
   AddOccasion,
   Month,
   OccasionType
-} from "../../../../../../api/src/controllers/occasions.controller";
+} from "../../../../../../api/src/validation";
 import useCreateOccasion from "../../hooks/use-create-occasion";
 import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";
 import styles from "./styles.module.css";

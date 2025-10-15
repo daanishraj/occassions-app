@@ -1,7 +1,7 @@
 import { Table } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React from "react";
-import { Occasion } from "../../../../../../api/src/controllers/occasions.controller";
+import { Occasion } from "../../../../../../api/src/validation";
 import useDeleteOccasion from "../../hooks/use-delete-occasion";
 import EditOccasionDialog from "../edit-occasion-dialog";
 

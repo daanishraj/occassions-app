@@ -1,7 +1,7 @@
 import { SignedIn, useAuth } from "@clerk/clerk-react";
 import { Button, Select, TextInput } from "@mantine/core";
 import React from "react";
-import { Month, Occasion } from "../../../../api/src/controllers/occasions.controller";
+import { Month, Occasion } from "../../../../api/src/validation";
 import Profile from "../profile";
 import AddOccasionDialog from "./components/add-occassion-dialog";
 import OccasionsTable from "./components/occassions-table/OccassionsTable";

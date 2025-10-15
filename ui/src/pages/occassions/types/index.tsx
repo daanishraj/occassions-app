@@ -1,4 +1,4 @@
-import { Month, OccasionType } from "../../../../../api/src/controllers/occasions.controller";
+import { Month, OccasionType } from "../../../../../api/src/validation";
 
 export const selectMonthOptions : string[] = Object.values(Month) as string[]
 

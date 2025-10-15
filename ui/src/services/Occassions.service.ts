@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { AddOccasion, EditOccasion, Occasion } from "../../../api/src/controllers/occasions.controller";
+import { AddOccasion, EditOccasion, Occasion } from "../../../api/src/validation";
 import Api from "./Api";
 
 const route = "/occasions";

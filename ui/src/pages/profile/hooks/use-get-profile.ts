@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Profile } from "../../../../../api/src/controllers/profile.controller";
+import { Profile } from "../../../../../api/src/validation";
 import { QueryKeys } from "../../../types";
 import ProfileService from "../services/Profile.service";
 

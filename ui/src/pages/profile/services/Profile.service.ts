@@ -1,4 +1,4 @@
-import { Profile } from "../../../../../api/src/controllers/profile.controller";
+import { Profile } from "../../../../../api/src/validation";
 import Api from "../../../services/Api";
 
 const route = "/profile";

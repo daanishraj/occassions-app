@@ -1,7 +1,7 @@
 import { Button, TextInput } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
 import React from "react";
-import { Profile } from "../../../../../../api/src/controllers/profile.controller";
+import { Profile } from "../../../../../../api/src/validation";
 import useEditProfile from "../../hooks/use-edit-profile";
 import useGetProfile from "../../hooks/use-get-profile";
 import styles from "./styles.module.css";
@@ -21,12 +21,13 @@ const CustomUserInfo = () => {
   const form = useForm<Profile>({
     mode: "controlled",
     validateInputOnChange: true,
-    initialValues: { fullName: "", email: "", whatsAppNumber: "" },
+    initialValues: { firstName: "", lastName: "", email: "", phoneNumber: "" },
 
     validate: {
-      fullName: hasLength({ min: 2, max: 30 }, "Full name must be 2-30 characters long"),
+      firstName: hasLength({ min: 1, max: 50 }, "First name must be 1-50 characters long"),
+      lastName: hasLength({ min: 1, max: 50 }, "Last name must be 1-50 characters long"),
       email: isEmail("Invalid email"),
-      whatsAppNumber: (value) =>
+      phoneNumber: (value: string | undefined) =>
         isValidPhoneNumber(value)
           ? null
           : "Number must begin with a +, have the country code, and the correct number of digits",
@@ -66,10 +67,18 @@ const CustomUserInfo = () => {
   return (
     <form className={styles.form} onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
-        label="Full name"
-        placeholder="Full name"
-        key={form.key("fullName")}
-        {...form.getInputProps("fullName")}
+        label="First name"
+        placeholder="First name"
+        key={form.key("firstName")}
+        {...form.getInputProps("firstName")}
+        withAsterisk
+      />
+      <TextInput
+        mt="sm"
+        label="Last name"
+        placeholder="Last name"
+        key={form.key("lastName")}
+        {...form.getInputProps("lastName")}
         withAsterisk
       />
       <TextInput
@@ -82,10 +91,10 @@ const CustomUserInfo = () => {
       />
       <TextInput
         mt="sm"
-        label="Whatsapp Number"
+        label="Phone Number"
         placeholder="ex. +4917642177411"
-        key={form.key("whatsAppNumber")}
-        {...form.getInputProps("whatsAppNumber")}
+        key={form.key("phoneNumber")}
+        {...form.getInputProps("phoneNumber")}
       />
       <Button className={styles.submitButton} type="submit" mt="sm">
         Save

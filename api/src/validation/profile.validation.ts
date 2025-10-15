@@ -1,13 +1,14 @@
 import { z } from "zod";
 
-const whatsAppRegex = /^\+[1-9]\d{9,14}$/;
+const phoneRegex = /^\+[1-9]\d{9,14}$/;
 
 const ProfileSchema = z.object({
-  fullName: z.string(),
+  firstName: z.string().min(1, "First name is required").max(50),
+  lastName: z.string().min(1, "Last name is required").max(50),
   email: z.string().email(),
-  whatsAppNumber: z
+  phoneNumber: z
     .string()
-    .regex(whatsAppRegex, {
+    .regex(phoneRegex, {
       message: "Number should begin with a +, have country code and the correct number of digits",
     })
     .optional(),

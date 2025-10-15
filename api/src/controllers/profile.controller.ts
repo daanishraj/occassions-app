@@ -2,9 +2,10 @@ import type { Request, Response } from "express";
 import { ProfileSchema, type Profile } from '../validation';
 
 let profileData: Profile = {
-  fullName: "James Py",
+  firstName: "James",
+  lastName: "Py",
   email: "awake@srf.org",
-  whatsAppNumber: "+4917664099416",
+  phoneNumber: "+4917664099416",
 };
 
 // TODO: fix this

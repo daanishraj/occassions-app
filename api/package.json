@@ -7,7 +7,7 @@
     "build": "run-p type-check build:only",
     "build:only": "tsup src/index.ts --silent --sourcemap",
     "dev": "tsup src/index.ts --silent --watch --onSuccess 'nodemon --delay 0.5 --watch ../../packages dist/index.js'",
-    "deploy": "npm install && npm run build",
+    "deploy": "npm ci && npx prisma migrate deploy && rm -rf node_modules/.prisma && npx prisma generate && npm run build",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "start": "node dist/index.js",

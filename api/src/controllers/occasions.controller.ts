@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import type { Request, Response } from "express";
 import {
   AddOccasionSchema,
@@ -21,6 +22,7 @@ const getOccasions = async (req: Request, res: Response) => {
       userId
     }
   })
+  // const occasions = [{}];
   res.status(200).send(occasions);
 };
 
@@ -92,9 +94,9 @@ const deleteOccasion = async (req: Request, res: Response) => {
     })
     res.json(deletedOccasion);
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error deleting occasion:', error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       res.status(404).json({ error: 'Occasion not found' });
     } else {
       res.status(500).json({ error: 'Internal Server Error' });

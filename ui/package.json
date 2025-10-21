@@ -25,6 +25,7 @@
   "devDependencies": {
     "@babel/runtime": "^7.28.4",
     "@floating-ui/react": "^0.26.28",
+    "@floating-ui/utils": "^0.1.6",
     "@tanstack/eslint-plugin-query": "^5.28.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

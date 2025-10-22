@@ -18,7 +18,10 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:pull": "prisma db pull",
-    "prisma:reset": "prisma migrate reset"
+    "prisma:reset": "prisma migrate reset",
+    "daily-notifications": "tsx src/scripts/daily-notifications.ts",
+    "daily-notifications:build": "tsup src/scripts/daily-notifications.ts --silent --sourcemap",
+    "daily-notifications:run": "node dist/daily-notifications.js"
   },
   "keywords": [],
   "author": "",
@@ -48,13 +51,15 @@
     "typescript": "^5.4.4"
   },
   "dependencies": {
+    "@clerk/backend": "^2.18.3",
     "@prisma/client": "^5.21.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "http-status": "^1.7.4",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "tsup": "^8.0.2",
+    "twilio": "^4.19.0",
     "uuid": "^9.0.1",
     "zod": "^3.23.4"
   },

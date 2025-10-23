@@ -1,6 +1,6 @@
 import { OccasionType, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
-import { logger } from '../utils/logger';
+import { dailyNotificationsLogger } from '../utils/dailyNotificationsLogger';
 import { createClerkService } from './utils/clerk';
 import { DateUtils } from './utils/date-utils';
 import { createTwilioService } from './utils/twilio';
@@ -28,24 +28,24 @@ class DailyNotificationService {
   }
 
   async run(): Promise<void> {
-    logger.info('Starting daily notification script...');
+    dailyNotificationsLogger.info('Starting daily notification script...');
     
     try {
       const today = DateUtils.getTodayDateInfo();
-      logger.info(`Checking for occasions on ${DateUtils.formatDateInfo(today)}`);
+      dailyNotificationsLogger.info(`Checking for occasions on ${DateUtils.formatDateInfo(today)}`);
 
       // Get all unique user IDs from the database
       const userIds = await this.getAllUserIds();
-      logger.info(`Found ${userIds.length} unique users in database`);
+      dailyNotificationsLogger.info(`Found ${userIds.length} unique users in database`);
 
       if (userIds.length === 0) {
-        logger.info('No users found in database. Exiting.');
+        dailyNotificationsLogger.info('No users found in database. Exiting.');
         return;
       }
 
       // Get phone numbers for all users
       const userPhoneNumbers = await this.clerkService.getAllUserPhoneNumbers(userIds);
-      logger.info(`Retrieved phone numbers for ${userPhoneNumbers.length} users`);
+      dailyNotificationsLogger.info(`Retrieved phone numbers for ${userPhoneNumbers.length} users`);
 
       let usersProcessed = 0;
       let messagesSent = 0;
@@ -54,10 +54,10 @@ class DailyNotificationService {
       for (const userPhone of userPhoneNumbers) {
         try {
           usersProcessed++;
-          logger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userPhone.userId}`);
+          dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userPhone.userId}`);
 
           if (!userPhone.phoneNumber) {
-            logger.info(`No phone number found for user ${userPhone.userId}. Skipping.`);
+            dailyNotificationsLogger.info(`No phone number found for user ${userPhone.userId}. Skipping.`);
             continue;
           }
 
@@ -65,7 +65,7 @@ class DailyNotificationService {
           const userOccasions = await this.getTodaysOccasionsForUser(userPhone.userId, today);
           
           if (userOccasions.length === 0) {
-            logger.info(`No occasions found for user ${userPhone.userId} today. Skipping.`);
+            dailyNotificationsLogger.info(`No occasions found for user ${userPhone.userId} today. Skipping.`);
             continue;
           }
 
@@ -79,26 +79,26 @@ class DailyNotificationService {
             
             if (success) {
               messagesSent++;
-              logger.info(`Message sent successfully to user ${userPhone.userId}`);
+              dailyNotificationsLogger.info(`Message sent successfully to user ${userPhone.userId}`);
             } else {
-              logger.error(`Failed to send message to user ${userPhone.userId}`);
+              dailyNotificationsLogger.error(`Failed to send message to user ${userPhone.userId}`);
             }
           }
 
         } catch (error) {
-          logger.error(`Error processing user ${userPhone.userId}:`, error);
+          dailyNotificationsLogger.error(`Error processing user ${userPhone.userId}:`, error);
           // Continue to next user
         }
       }
 
       // Log final statistics
-      logger.info(`Script completed successfully.`);
-      logger.info(`Users processed: ${usersProcessed}`);
-      logger.info(`Users sent messages: ${messagesSent}`);
-      logger.info(`Logs saved to: ${logger.logFilePath}`);
+      dailyNotificationsLogger.info(`Script completed successfully.`);
+      dailyNotificationsLogger.info(`Users processed: ${usersProcessed}`);
+      dailyNotificationsLogger.info(`Users sent messages: ${messagesSent}`);
+      dailyNotificationsLogger.info(`Logs saved to: ${dailyNotificationsLogger.logFilePath}`);
 
     } catch (error) {
-      logger.error('Fatal error in daily notification script:', error);
+      dailyNotificationsLogger.error('Fatal error in daily notification script:', error);
       throw error;
     } finally {
       await this.prisma.$disconnect();
@@ -164,9 +164,9 @@ async function main() {
   
   try {
     await service.run();
-    logger.info('Daily notification script completed successfully');
+    dailyNotificationsLogger.info('Daily notification script completed successfully');
   } catch (error) {
-    logger.error('Daily notification script failed:', error);
+    dailyNotificationsLogger.error('Daily notification script failed:', error);
     process.exit(1);
   }
 }

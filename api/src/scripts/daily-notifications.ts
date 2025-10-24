@@ -188,8 +188,8 @@ async function main() {
   }
 }
 
-// Run the script if this file is executed directly
-if (require.main === module) {
+// This prevents the script from running when imported by other modules
+if (require.main === module && process.argv.includes('--run-daily-notifications')) {
   main();
 }
 

@@ -8,13 +8,15 @@ export interface ClerkConfig {
 export interface UserPhoneNumber {
   userId: string;
   phoneNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 interface PhoneNumber {
   phoneNumber: string;
   verification?: {
     status: string;
-  };
+  } | null;
 }
 
 export class ClerkService {
@@ -26,33 +28,45 @@ export class ClerkService {
     });
   }
 
-  async getUserPhoneNumber(userId: string): Promise<string | null> {
+  async getUserPhoneNumber(userId: string): Promise<UserPhoneNumber> {
     try {
       const user = await this.clerk.users.getUser(userId);
       
       const phoneNumbers: PhoneNumber[] = user.phoneNumbers;
+      let phoneNumber: string | null = null;
       
       if (phoneNumbers && phoneNumbers.length > 0) {
         // Return the first verified phone number, or the first one if none are verified
         const verifiedPhone = phoneNumbers.find((pn: PhoneNumber) => pn.verification?.status === 'verified');
-        const phoneNumber = verifiedPhone || phoneNumbers[0];
+        const selectedPhone = verifiedPhone || phoneNumbers[0];
+        phoneNumber = selectedPhone.phoneNumber;
         
-        logger.info(`Found phone number for user ${userId}: ${phoneNumber.phoneNumber}`);
-        return phoneNumber.phoneNumber;
+        logger.info(`Found phone number for user ${userId}: ${phoneNumber}`);
+      } else {
+        // Check public metadata for phone number (fallback)
+        const publicMetadata = user.publicMetadata as any;
+        if (publicMetadata?.phoneNumber) {
+          phoneNumber = publicMetadata.phoneNumber;
+          logger.info(`Found phone number in metadata for user ${userId}: ${phoneNumber}`);
+        } else {
+          logger.info(`No phone number found for user ${userId}`);
+        }
       }
 
-      // Check public metadata for phone number (fallback)
-      const publicMetadata = user.publicMetadata as any;
-      if (publicMetadata?.phoneNumber) {
-        logger.info(`Found phone number in metadata for user ${userId}: ${publicMetadata.phoneNumber}`);
-        return publicMetadata.phoneNumber;
-      }
-
-      logger.info(`No phone number found for user ${userId}`);
-      return null;
+      return {
+        userId,
+        phoneNumber,
+        firstName: user.firstName,
+        lastName: user.lastName
+      };
     } catch (error) {
-      logger.error(`Failed to fetch phone number for user ${userId}:`, error);
-      return null;
+      logger.error(`Failed to fetch user data for user ${userId}:`, error);
+      return {
+        userId,
+        phoneNumber: null,
+        firstName: null,
+        lastName: null
+      };
     }
   }
 
@@ -60,8 +74,8 @@ export class ClerkService {
     const results: UserPhoneNumber[] = [];
     
     for (const userId of userIds) {
-      const phoneNumber = await this.getUserPhoneNumber(userId);
-      results.push({ userId, phoneNumber });
+      const userData = await this.getUserPhoneNumber(userId);
+      results.push(userData);
     }
     
     return results;

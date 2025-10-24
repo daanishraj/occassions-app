@@ -27,6 +27,18 @@ class DailyNotificationService {
     this.clerkService = createClerkService();
   }
 
+  private formatUserName(user: { firstName: string | null; lastName: string | null; userId: string }): string {
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    } else if (user.firstName) {
+      return user.firstName;
+    } else if (user.lastName) {
+      return user.lastName;
+    } else {
+      return user.userId; // Fallback to userId if no name available
+    }
+  }
+
   async run(): Promise<void> {
     dailyNotificationsLogger.info('Starting daily notification script...');
     
@@ -54,10 +66,11 @@ class DailyNotificationService {
       for (const userPhone of userPhoneNumbers) {
         try {
           usersProcessed++;
-          dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userPhone.userId}`);
+          const userName = this.formatUserName(userPhone);
+          dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userName}`);
 
           if (!userPhone.phoneNumber) {
-            dailyNotificationsLogger.info(`No phone number found for user ${userPhone.userId}. Skipping.`);
+            dailyNotificationsLogger.info(`No phone number found for user ${userName}. Skipping.`);
             continue;
           }
 
@@ -65,7 +78,7 @@ class DailyNotificationService {
           const userOccasions = await this.getTodaysOccasionsForUser(userPhone.userId, today);
           
           if (userOccasions.length === 0) {
-            dailyNotificationsLogger.info(`No occasions found for user ${userPhone.userId} today. Skipping.`);
+            dailyNotificationsLogger.info(`No occasions found for user ${userName} today. Skipping.`);
             continue;
           }
 
@@ -79,14 +92,15 @@ class DailyNotificationService {
             
             if (success) {
               messagesSent++;
-              dailyNotificationsLogger.info(`Message sent successfully to user ${userPhone.userId}`);
+              dailyNotificationsLogger.info(`Message sent successfully to user ${userName}`);
             } else {
-              dailyNotificationsLogger.error(`Failed to send message to user ${userPhone.userId}`);
+              dailyNotificationsLogger.error(`Failed to send message to user ${userName}`);
             }
           }
 
         } catch (error) {
-          dailyNotificationsLogger.error(`Error processing user ${userPhone.userId}:`, error);
+          const userName = this.formatUserName(userPhone);
+          dailyNotificationsLogger.error(`Error processing user ${userName}:`, error);
           // Continue to next user
         }
       }

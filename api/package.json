@@ -19,9 +19,9 @@
     "prisma:studio": "prisma studio",
     "prisma:pull": "prisma db pull",
     "prisma:reset": "prisma migrate reset",
-    "daily-notifications": "tsx src/scripts/daily-notifications.ts",
+    "daily-notifications": "tsx src/scripts/daily-notifications.ts -- --run-daily-notifications",
     "daily-notifications:build": "tsup src/scripts/daily-notifications.ts --silent --sourcemap",
-    "daily-notifications:run": "node dist/daily-notifications.js"
+    "daily-notifications:run": "node dist/daily-notifications.js -- --run-daily-notifications"
   },
   "keywords": [],
   "author": "",

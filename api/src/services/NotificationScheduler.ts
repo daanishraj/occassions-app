@@ -6,14 +6,20 @@ export class NotificationScheduler {
   private dailyNotificationService: DailyNotificationService;
   private cronJob: cron.ScheduledTask | null = null;
   
-  private readonly DAILY_SCHEDULE_TIME = '35 15 * * *';
-  private readonly SCHEDULE_DESCRIPTION = '15:35 CET';
+  private readonly DAILY_SCHEDULE_TIME = '00 5 * * *';
+  private readonly SCHEDULE_DESCRIPTION = '5:00 CET';
 
   constructor() {
     this.dailyNotificationService = new DailyNotificationService();
   }
 
   start(): void {
+    // Prevent multiple cron jobs from being created
+    if (this.cronJob) {
+      logger.info('📅 Daily notifications scheduler is already running');
+      return;
+    }
+
     // Cron format: minute hour day month dayOfWeek
     this.cronJob = cron.schedule(this.DAILY_SCHEDULE_TIME, async () => {
       logger.info(`🕐 Scheduled daily notifications triggered at ${this.SCHEDULE_DESCRIPTION}`);

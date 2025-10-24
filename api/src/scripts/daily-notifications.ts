@@ -1,7 +1,7 @@
 import { OccasionType, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import { dailyNotificationsLogger } from '../utils/dailyNotificationsLogger';
-import { createClerkService } from './utils/clerk';
+import { createClerkService, UserInfo } from './utils/clerk';
 import { DateUtils } from './utils/date-utils';
 import { createTwilioService } from './utils/twilio';
 
@@ -27,7 +27,22 @@ class DailyNotificationService {
     this.clerkService = createClerkService();
   }
 
+  private formatUserName(userInfo: UserInfo): string {
+    if (userInfo.firstName && userInfo.lastName) {
+      return `${userInfo.firstName} ${userInfo.lastName}`;
+    } 
+    if (userInfo.firstName) {
+      return userInfo.firstName;
+    } 
+    if (userInfo.lastName) {
+      return userInfo.lastName;
+    } 
+    return userInfo.userId;
+  }
+
   async run(): Promise<void> {
+    // Clear the log file at the start of each script run
+    dailyNotificationsLogger.clearLogFile();
     dailyNotificationsLogger.info('Starting daily notification script...');
     
     try {
@@ -44,28 +59,29 @@ class DailyNotificationService {
       }
 
       // Get phone numbers for all users
-      const userPhoneNumbers = await this.clerkService.getAllUserPhoneNumbers(userIds);
-      dailyNotificationsLogger.info(`Retrieved phone numbers for ${userPhoneNumbers.length} users`);
+      const allUsersInfo = await this.clerkService.getAllUsersInfo(userIds);
+      dailyNotificationsLogger.info(`Retrieved phone numbers for ${allUsersInfo.length} users`);
 
       let usersProcessed = 0;
       let messagesSent = 0;
 
       // Process each user
-      for (const userPhone of userPhoneNumbers) {
+      for (const userInfo of allUsersInfo) {
         try {
           usersProcessed++;
-          dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userPhone.userId}`);
+          const userName = this.formatUserName(userInfo);
+          dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userName}`);
 
-          if (!userPhone.phoneNumber) {
-            dailyNotificationsLogger.info(`No phone number found for user ${userPhone.userId}. Skipping.`);
+          if (!userInfo.phoneNumber) {
+            dailyNotificationsLogger.info(`No phone number found for user ${userName}. Skipping.`);
             continue;
           }
 
           // Get today's occasions for this user
-          const userOccasions = await this.getTodaysOccasionsForUser(userPhone.userId, today);
+          const userOccasions = await this.getTodaysOccasionsForUser(userInfo.userId, today);
           
           if (userOccasions.length === 0) {
-            dailyNotificationsLogger.info(`No occasions found for user ${userPhone.userId} today. Skipping.`);
+            dailyNotificationsLogger.info(`No occasions found for user ${userName} today. Skipping.`);
             continue;
           }
 
@@ -75,18 +91,19 @@ class DailyNotificationService {
           // Send message if there are occasions
           if (occasionGroups.length > 0) {
             const message = this.constructMessage(occasionGroups);
-            const success = await this.twilioService.sendSMS(userPhone.phoneNumber, message);
+            const success = await this.twilioService.sendSMS(userInfo.phoneNumber, message);
             
             if (success) {
               messagesSent++;
-              dailyNotificationsLogger.info(`Message sent successfully to user ${userPhone.userId}`);
+              dailyNotificationsLogger.info(`Message sent successfully to user ${userName}`);
             } else {
-              dailyNotificationsLogger.error(`Failed to send message to user ${userPhone.userId}`);
+              dailyNotificationsLogger.error(`Failed to send message to user ${userName}`);
             }
           }
 
         } catch (error) {
-          dailyNotificationsLogger.error(`Error processing user ${userPhone.userId}:`, error);
+          const userName = this.formatUserName(userInfo);
+          dailyNotificationsLogger.error(`Error processing user ${userName}:`, error);
           // Continue to next user
         }
       }
@@ -171,8 +188,8 @@ async function main() {
   }
 }
 
-// Run the script if this file is executed directly
-if (require.main === module) {
+// This prevents the script from running when imported by other modules
+if (require.main === module && process.argv.includes('--run-daily-notifications')) {
   main();
 }
 

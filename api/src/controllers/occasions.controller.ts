@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import type { Request, Response } from "express";
@@ -8,12 +9,8 @@ import {
 
 const prisma = new PrismaClient()
 
-// TODO: fix this
-// @ts-ignore
 const getOccasions = async (req: Request, res: Response) => {
-  console.log('backend - making  a GET request');
   const userId = req.headers.authorization?.split(" ")[1];
-  console.log('userId: ', userId); // Extract userId from Authorization header
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized: userId is missing" });
   }
@@ -22,16 +19,14 @@ const getOccasions = async (req: Request, res: Response) => {
       userId
     }
   })
-  // const occasions = [{}];
   res.status(200).send(occasions);
 };
 
 const addOccasion = async (req: Request, res: Response) => {
-  console.log('body: ', req.body);
   const parseResult = AddOccasionSchema.safeParse(req.body);
   
   if (!parseResult.success) {
-    console.log("Invalid payload - missing or incorrect fields!");
+    logger.error("Invalid payload - missing or incorrect fields!");
     return res.status(400).json({ error: "some fields are missing or incorrect", details: parseResult.error.errors });
   }
   const { userId, name, occasionType, month, day } = req.body;
@@ -78,7 +73,7 @@ const editOccasion = async (req: Request, res: Response) => {
 
     res.json(updatedOccasion);
   } catch (error) {
-    console.error("Error updating occasion:", error);
+    logger.error("Error updating occasion:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -95,7 +90,7 @@ const deleteOccasion = async (req: Request, res: Response) => {
     res.json(deletedOccasion);
 
   } catch (error: unknown) {
-    console.error('Error deleting occasion:', error);
+    logger.error('Error deleting occasion:', error);
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       res.status(404).json({ error: 'Occasion not found' });
     } else {

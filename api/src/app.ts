@@ -62,10 +62,15 @@ const setupGracefulShutdown = (scheduler: NotificationScheduler) => {
 }
 
 export const initAppServer = () => {
-  logger.info("Starting Notification Scheduler...");
-  notificationScheduler = new NotificationScheduler();
-  notificationScheduler.start();
-  setupGracefulShutdown(notificationScheduler);
+  // create scheduler if it doesn't exist - avoid duplicate cron jobs
+  if (!notificationScheduler) {
+    logger.info("Starting Notification Scheduler...");
+    notificationScheduler = new NotificationScheduler();
+    notificationScheduler.start();
+    setupGracefulShutdown(notificationScheduler);
+  } else {
+    logger.info("Notification Scheduler already exists, skipping initialization");
+  }
   return app;
 }
 

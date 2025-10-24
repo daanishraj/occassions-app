@@ -5,7 +5,7 @@ export interface ClerkConfig {
   secretKey: string;
 }
 
-export interface UserPhoneNumber {
+export interface UserInfo {
   userId: string;
   phoneNumber: string | null;
   firstName: string | null;
@@ -28,7 +28,7 @@ export class ClerkService {
     });
   }
 
-  async getUserPhoneNumber(userId: string): Promise<UserPhoneNumber> {
+  async getUserInfo(userId: string): Promise<UserInfo> {
     try {
       const user = await this.clerk.users.getUser(userId);
       
@@ -70,12 +70,12 @@ export class ClerkService {
     }
   }
 
-  async getAllUserPhoneNumbers(userIds: string[]): Promise<UserPhoneNumber[]> {
-    const results: UserPhoneNumber[] = [];
+  async getAllUsersInfo(userIds: string[]): Promise<UserInfo[]> {
+    const results: UserInfo[] = [];
     
     for (const userId of userIds) {
-      const userData = await this.getUserPhoneNumber(userId);
-      results.push(userData);
+      const userInfo = await this.getUserInfo(userId);
+      results.push(userInfo);
     }
     
     return results;

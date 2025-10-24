@@ -1,7 +1,7 @@
 import { OccasionType, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import { dailyNotificationsLogger } from '../utils/dailyNotificationsLogger';
-import { createClerkService } from './utils/clerk';
+import { createClerkService, UserInfo } from './utils/clerk';
 import { DateUtils } from './utils/date-utils';
 import { createTwilioService } from './utils/twilio';
 
@@ -27,19 +27,22 @@ class DailyNotificationService {
     this.clerkService = createClerkService();
   }
 
-  private formatUserName(user: { firstName: string | null; lastName: string | null; userId: string }): string {
-    if (user.firstName && user.lastName) {
-      return `${user.firstName} ${user.lastName}`;
-    } else if (user.firstName) {
-      return user.firstName;
-    } else if (user.lastName) {
-      return user.lastName;
-    } else {
-      return user.userId; // Fallback to userId if no name available
-    }
+  private formatUserName(userInfo: UserInfo): string {
+    if (userInfo.firstName && userInfo.lastName) {
+      return `${userInfo.firstName} ${userInfo.lastName}`;
+    } 
+    if (userInfo.firstName) {
+      return userInfo.firstName;
+    } 
+    if (userInfo.lastName) {
+      return userInfo.lastName;
+    } 
+    return userInfo.userId;
   }
 
   async run(): Promise<void> {
+    // Clear the log file at the start of each script run
+    dailyNotificationsLogger.clearLogFile();
     dailyNotificationsLogger.info('Starting daily notification script...');
     
     try {
@@ -56,26 +59,26 @@ class DailyNotificationService {
       }
 
       // Get phone numbers for all users
-      const userPhoneNumbers = await this.clerkService.getAllUserPhoneNumbers(userIds);
-      dailyNotificationsLogger.info(`Retrieved phone numbers for ${userPhoneNumbers.length} users`);
+      const allUsersInfo = await this.clerkService.getAllUsersInfo(userIds);
+      dailyNotificationsLogger.info(`Retrieved phone numbers for ${allUsersInfo.length} users`);
 
       let usersProcessed = 0;
       let messagesSent = 0;
 
       // Process each user
-      for (const userPhone of userPhoneNumbers) {
+      for (const userInfo of allUsersInfo) {
         try {
           usersProcessed++;
-          const userName = this.formatUserName(userPhone);
+          const userName = this.formatUserName(userInfo);
           dailyNotificationsLogger.info(`Processing user ${usersProcessed}/${userIds.length}: ${userName}`);
 
-          if (!userPhone.phoneNumber) {
+          if (!userInfo.phoneNumber) {
             dailyNotificationsLogger.info(`No phone number found for user ${userName}. Skipping.`);
             continue;
           }
 
           // Get today's occasions for this user
-          const userOccasions = await this.getTodaysOccasionsForUser(userPhone.userId, today);
+          const userOccasions = await this.getTodaysOccasionsForUser(userInfo.userId, today);
           
           if (userOccasions.length === 0) {
             dailyNotificationsLogger.info(`No occasions found for user ${userName} today. Skipping.`);
@@ -88,7 +91,7 @@ class DailyNotificationService {
           // Send message if there are occasions
           if (occasionGroups.length > 0) {
             const message = this.constructMessage(occasionGroups);
-            const success = await this.twilioService.sendSMS(userPhone.phoneNumber, message);
+            const success = await this.twilioService.sendSMS(userInfo.phoneNumber, message);
             
             if (success) {
               messagesSent++;
@@ -99,7 +102,7 @@ class DailyNotificationService {
           }
 
         } catch (error) {
-          const userName = this.formatUserName(userPhone);
+          const userName = this.formatUserName(userInfo);
           dailyNotificationsLogger.error(`Error processing user ${userName}:`, error);
           // Continue to next user
         }

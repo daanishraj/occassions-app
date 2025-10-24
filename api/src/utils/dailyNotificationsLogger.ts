@@ -7,8 +7,7 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
-const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-const logFileName = `daily-notifications-${timestamp}.log`;
+const logFileName = 'daily-notifications.log';
 const logFilePath = path.join(logsDir, logFileName);
 
 // format log messages
@@ -18,6 +17,11 @@ const formatLogMessage = (level: string, ...params: any[]): string => {
     typeof param === 'object' ? JSON.stringify(param, null, 2) : String(param)
   ).join(' ');
   return `[${timestamp}] [${level.toUpperCase()}] ${message}\n`;
+};
+
+// Clear the log file at the start of each script run
+const clearLogFile = () => {
+  fs.writeFileSync(logFilePath, '');
 };
 
 const info = (...params: any) => {
@@ -39,5 +43,6 @@ const error = (...params: any) => {
 export const dailyNotificationsLogger = {
   info,
   error,
+  clearLogFile,
   logFilePath
 };

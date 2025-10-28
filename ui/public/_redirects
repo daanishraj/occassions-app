@@ -1,0 +1,4 @@
+# SPA Routing - Redirect all requests to index.html
+# This allows React Router to handle client-side routing
+/*    /index.html   200
+

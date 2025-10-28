@@ -23,6 +23,7 @@ const App = () => {
             <Occassions />
             </SignedIn>
             } />
+          <Route path="/index.html" element={<Navigate to="/" replace />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>

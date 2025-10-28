@@ -8,7 +8,6 @@ import "./styles/mantine.css";
 
 const queryClient = new QueryClient();
 
-// Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!PUBLISHABLE_KEY) {

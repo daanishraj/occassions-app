@@ -1,9 +1,10 @@
 import { OccasionType, PrismaClient } from '@prisma/client';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import { dailyNotificationsLogger } from '../utils/dailyNotificationsLogger';
 import { createClerkService, UserInfo } from './utils/clerk';
 import { DateUtils } from './utils/date-utils';
 import { createTwilioService } from './utils/twilio';
+dotenv.config();
 
 interface OccasionGroup {
   occasionType: OccasionType;

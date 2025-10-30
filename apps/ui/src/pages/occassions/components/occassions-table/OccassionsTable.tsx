@@ -1,5 +1,5 @@
 import { Table } from "@mantine/core";
-import { Occasion } from "@occassions/types";
+import { Occasion } from "@occasions/types";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import useDeleteOccasion from "../../hooks/use-delete-occasion";

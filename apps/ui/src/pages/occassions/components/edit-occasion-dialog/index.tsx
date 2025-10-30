@@ -1,6 +1,6 @@
 import { Button, Flex, Modal, Select, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { Month, Occasion } from "@occassions/types";
+import { Month, Occasion } from "@occasions/types";
 import React from "react";
 import useEditOccasion from "../../hooks/use-edit-occasion";
 import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "../../types";

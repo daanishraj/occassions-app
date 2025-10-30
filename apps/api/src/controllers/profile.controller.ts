@@ -1,4 +1,4 @@
-import { ProfileSchema, type Profile } from '@occassions/types';
+import { ProfileSchema, type Profile } from '@occasions/types';
 import type { Request, Response } from "express";
 
 let profileData: Profile = {

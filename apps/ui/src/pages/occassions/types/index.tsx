@@ -1,4 +1,4 @@
-import { Month, OccasionType } from "@occassions/types";
+import { Month, OccasionType } from "@occasions/types";
 
 export const selectMonthOptions : string[] = Object.values(Month) as string[]
 

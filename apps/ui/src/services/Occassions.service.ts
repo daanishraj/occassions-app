@@ -1,4 +1,4 @@
-import { AddOccasion, EditOccasion, Occasion } from "@occassions/types";
+import { AddOccasion, EditOccasion, Occasion } from "@occasions/types";
 import { AxiosResponse } from "axios";
 import Api from "./Api";
 

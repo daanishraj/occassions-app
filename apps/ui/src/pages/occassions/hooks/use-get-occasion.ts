@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { Occasion } from "@occassions/types";
+import { Occasion } from "@occasions/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import OccassionsService from "../../../services/Occassions.service";

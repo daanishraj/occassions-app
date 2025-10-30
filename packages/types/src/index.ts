@@ -1,7 +1,5 @@
-/* Shared types placeholder; add API contracts here when ready */
-export { z } from 'zod';
+import { z } from 'zod';
 
-// Occasions
 export enum Month {
   JANUARY = "January",
   FEBRUARY = "February",
@@ -21,8 +19,6 @@ export enum OccasionType {
   BIRTHDAY = "Birthday",
   ANNIVERSARY = "Anniversary",
 }
-
-import { z } from 'zod';
 
 export const OccasionSchema = z.object({
   id: z.string(),
@@ -52,7 +48,7 @@ export type Occasion = z.infer<typeof OccasionSchema>;
 export type AddOccasion = z.infer<typeof AddOccasionSchema>;
 export type EditOccasion = z.infer<typeof EditOccasionSchema>;
 
-// Profile
+// used for Profile
 const phoneRegex = /^\+[1-9]\d{9,14}$/;
 
 export const ProfileSchema = z.object({

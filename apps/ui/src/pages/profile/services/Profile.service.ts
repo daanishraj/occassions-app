@@ -1,4 +1,4 @@
-import { Profile } from "@occassions/types";
+import { Profile } from "@occasions/types";
 import Api from "../../../services/Api";
 
 const route = "/profile";

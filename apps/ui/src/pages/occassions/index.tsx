@@ -1,6 +1,6 @@
 import { SignedIn, useAuth } from "@clerk/clerk-react";
 import { Button, Select, TextInput } from "@mantine/core";
-import { Month, Occasion } from "@occassions/types";
+import { Month, Occasion } from "@occasions/types";
 import React from "react";
 import Profile from "../profile";
 import AddOccasionDialog from "./components/add-occassion-dialog";

@@ -1,6 +1,6 @@
 import { Button, TextInput } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
-import { Profile } from "@occassions/types";
+import { Profile } from "@occasions/types";
 import React from "react";
 import useEditProfile from "../../hooks/use-edit-profile";
 import useGetProfile from "../../hooks/use-get-profile";

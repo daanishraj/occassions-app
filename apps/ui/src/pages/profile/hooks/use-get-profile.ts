@@ -1,4 +1,4 @@
-import { Profile } from "@occassions/types";
+import { Profile } from "@occasions/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { QueryKeys } from "../../../types";

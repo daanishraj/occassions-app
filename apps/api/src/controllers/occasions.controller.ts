@@ -1,5 +1,5 @@
 import { logger } from '@/utils/logger';
-import { AddOccasionSchema, EditOccasionSchema } from '@occassions/types';
+import { AddOccasionSchema, EditOccasionSchema } from '@occasions/types';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import type { Request, Response } from "express";

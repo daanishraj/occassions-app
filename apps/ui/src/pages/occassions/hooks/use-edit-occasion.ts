@@ -1,4 +1,4 @@
-import { EditOccasion, Occasion } from "@occassions/types";
+import { EditOccasion, Occasion } from "@occasions/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import OccassionsService from "../../../services/Occassions.service";

@@ -1,25 +1,25 @@
 {
-  "name": "@occassions/types",
+  "name": "@occasions/types",
   "version": "0.0.1",
   "private": true,
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "files": ["dist"],
   "scripts": {
-    "build": "npm run build:cjs && npm run build:esm && node -e \"require('fs').cpSync('dist/esm/index.d.ts','dist/index.d.ts',{force:true}); require('fs').writeFileSync('dist/index.js', 'export * from \\\"./esm/index.js\\\"\\n');\"",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --sourcemap --clean",
+    "type-check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
+    "tsup": "^8.0.2",
     "typescript": "^5.4.4"
   },
   "dependencies": {

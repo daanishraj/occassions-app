@@ -24,9 +24,8 @@
   "description": "",
   "private": true,
   "workspaces": [
-    "api",
-    "ui",
-    "packages/tsconfig"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "@types/cors": "^2.8.17",

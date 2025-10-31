@@ -11,12 +11,7 @@
     "clean:root": "rm -rf .turbo dist artifacts node_modules/.cache",
     "full-clean": "run-p full-clean:turbo full-clean:root",
     "full-clean:turbo": "turbo run full-clean --no-daemon",
-    "full-clean:root": "rm -rf .turbo dist node_modules artifacts",
-    "prisma:generate:api": "turbo run prisma:generate --filter=api --no-daemon",
-    "prisma:migrate:api": "turbo run prisma:migrate --filter=api --no-daemon",
-    "prisma:studio:api": "turbo run prisma:studio --filter=api --no-daemon",
-    "prisma:pull:api": "turbo run prisma:pull --filter=api --no-daemon",
-    "prisma:reset:api": "turbo run prisma:reset --filter=api --no-daemon"
+    "full-clean:root": "rm -rf .turbo dist node_modules artifacts"
   },
   "keywords": [],
   "author": "",
@@ -24,9 +19,8 @@
   "description": "",
   "private": true,
   "workspaces": [
-    "api",
-    "ui",
-    "packages/tsconfig"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "@types/cors": "^2.8.17",

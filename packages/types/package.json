@@ -1,0 +1,28 @@
+{
+  "name": "@occasions/types",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --sourcemap --clean",
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "zod": "^3.23.4"
+  }
+}

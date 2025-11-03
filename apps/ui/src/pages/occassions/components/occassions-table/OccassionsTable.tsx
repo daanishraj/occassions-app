@@ -36,7 +36,7 @@ const OccasionsTable = ({ occassions, userId }: Props) => {
   ));
 
   return (
-    <Table>
+    <Table data-testid="occasions-table">
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Name</Table.Th>

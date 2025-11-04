@@ -1,3 +1,5 @@
+##VERIFY THIS ONCE MORE
+
 # Setting Up Test Database
 
 To run tests, you need to create a separate test database and configure `DATABASE_URL_TEST`.
@@ -23,15 +25,15 @@ Add `DATABASE_URL_TEST` to your `.env` file in the `apps/api/` directory:
 
 ```bash
 # Your existing DATABASE_URL (for development)
-DATABASE_URL="postgresql://user:password@localhost:5432/occasions"
+DATABASE_URL="postgresql://user:password@localhost:5432/never_miss_a_date"
 
 # Test database (REQUIRED for tests)
-DATABASE_URL_TEST="postgresql://user:password@localhost:5432/occasions_test"
+DATABASE_URL_TEST="postgresql://user:password@localhost:5432/never_miss_a_date_TEST"
 ```
 
 **Important**: The test database URL should:
 - Use the same credentials as your dev database
-- Point to a different database name (e.g., `occasions_test` instead of `occasions`)
+- Point to a different database name
 - Be on the same PostgreSQL server (or a separate test server)
 
 ## Option 2: Using the Setup Script
@@ -55,14 +57,14 @@ If you're using Docker for your database:
 
 ```bash
 # Create a test database container
-docker run --name occasions-test-db \
+docker run --name never-miss-a-date-test-db \
   -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=occasions_test \
+  -e POSTGRES_DB=never_miss_a_date_TEST \
   -p 5433:5432 \
   -d postgres
 
 # Then use:
-DATABASE_URL_TEST="postgresql://postgres:password@localhost:5433/occasions_test"
+DATABASE_URL_TEST="postgresql://postgres:password@localhost:5433/never_miss_a_date_TEST"
 ```
 
 ## Verification

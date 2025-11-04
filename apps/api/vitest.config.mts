@@ -20,6 +20,7 @@ if (!process.env.DATABASE_URL_TEST) {
 }
 
 // Set DATABASE_URL to the test database URL before any modules load
+// This ensures PrismaClient instances created at module load time use the test database
 process.env.DATABASE_URL = process.env.DATABASE_URL_TEST;
 
 export default defineConfig({

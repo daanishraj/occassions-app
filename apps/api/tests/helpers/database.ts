@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import { Month, OccasionType, PrismaClient } from '@prisma/client';
 import { execSync } from 'child_process';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { TEST_USER_ID } from './constants';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const setupTestDatabase = async () => {
-  // STRICT: Require DATABASE_URL_TEST - no fallback to prevent dev database contamination
   const testDatabaseUrl = process.env.DATABASE_URL_TEST;
   
   if (!testDatabaseUrl) {
@@ -34,7 +34,6 @@ export const setupTestDatabase = async () => {
     // Check if error is just about migrations already applied (which is fine)
     const errorOutput = error.stderr?.toString() || error.stdout?.toString() || error.message || '';
     
-    // If migrations are already applied or database already exists, that's okay
     if (errorOutput.includes('already applied') || 
         errorOutput.includes('Unique constraint failed') ||
         errorOutput.includes('already exists')) {
@@ -49,7 +48,6 @@ export const setupTestDatabase = async () => {
 };
 
 export const teardownTestDatabase = async () => {
-  // STRICT: Require DATABASE_URL_TEST - no fallback
   const testDatabaseUrl = process.env.DATABASE_URL_TEST;
   
   if (!testDatabaseUrl) {
@@ -64,19 +62,41 @@ export const teardownTestDatabase = async () => {
     },
   });
 
-  // Clean up all test data
-  await prisma.occasion.deleteMany();
-  
-  await prisma.$disconnect();
+  try {
+    // Get all table names in the public schema, excluding Prisma system tables
+    const tablesResult = await prisma.$queryRaw<Array<{ tablename: string }>>`
+      SELECT tablename 
+      FROM pg_tables 
+      WHERE schemaname = 'public'
+      AND tablename NOT LIKE '_prisma_%'
+    `;
+
+    const tableNames = tablesResult.map((row) => row.tablename);
+
+    if (tableNames.length > 0) {
+      // Truncate all tables with CASCADE to handle foreign key constraints
+      // This is faster and more thorough than deleteMany()
+      const tableList = tableNames.map((name) => `"${name}"`).join(', ');
+      await prisma.$executeRawUnsafe(
+        `TRUNCATE TABLE ${tableList} RESTART IDENTITY CASCADE;`
+      );
+      console.log(`✓ Cleared ${tableNames.length} table(s): ${tableNames.join(', ')}`);
+    } else {
+      console.log('✓ No tables found to clear');
+    }
+  } catch (error) {
+    console.error('✗ Error clearing test database:', error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
 };
 
 export const seedTestData = async (prisma: PrismaClient) => {
-  const testUserId = 'test-user-id-123';
-  
   // Clean existing test data
   await prisma.occasion.deleteMany({
     where: {
-      userId: testUserId,
+      userId: TEST_USER_ID,
     },
   });
 
@@ -84,22 +104,22 @@ export const seedTestData = async (prisma: PrismaClient) => {
   const occasions = await prisma.occasion.createMany({
     data: [
       {
-        userId: testUserId,
+        userId: TEST_USER_ID,
         name: 'John Doe Birthday',
-        occasionType: 'Birthday',
-        month: 'January',
+        occasionType: OccasionType.Birthday,
+        month: Month.January,
         day: 15,
       },
       {
-        userId: testUserId,
+        userId: TEST_USER_ID,
         name: 'Wedding Anniversary',
-        occasionType: 'Anniversary',
-        month: 'June',
+        occasionType: OccasionType.Anniversary,
+        month: Month.June,
         day: 20,
       },
     ],
   });
 
-  return { testUserId, occasions };
+  return { testUserId: TEST_USER_ID, occasions };
 };
 

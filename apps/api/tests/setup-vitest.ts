@@ -14,7 +14,6 @@ import { seedTestData, setupTestDatabase, teardownTestDatabase } from './helpers
 let prisma: PrismaClient;
 
 beforeAll(async () => {
-  // STRICT: Require DATABASE_URL_TEST - no fallback to prevent dev database contamination
   const testDatabaseUrl = process.env.DATABASE_URL_TEST;
   
   if (!testDatabaseUrl) {
@@ -26,8 +25,8 @@ beforeAll(async () => {
     );
   }
   
-  // Override DATABASE_URL for tests (this should already be set in vitest.config.mts, but ensure it here too)
-  process.env.DATABASE_URL = testDatabaseUrl;
+  // Note: DATABASE_URL is already set to DATABASE_URL_TEST in vitest.config.mts
+  // before any modules load, so PrismaClient instances will use the test database
   
   // Setup test database (run migrations)
   await setupTestDatabase();

@@ -2,7 +2,8 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "backend",
     "exclude": ["node_modules"],
-    "include": ["src", "tests", ".eslintrc.js"],
+    "include": ["src", "tests", ".eslintrc.js", "vitest.config.mts"],
+    "types": ["vitest/globals"],
     "compilerOptions": {
       "baseUrl": ".",
       "paths": {

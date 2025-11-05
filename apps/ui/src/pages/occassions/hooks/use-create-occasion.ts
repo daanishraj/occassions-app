@@ -1,3 +1,5 @@
+import { useAuth } from "@clerk/clerk-react";
+import { AddOccasion } from "@occasions/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import OccassionsService from "../../../services/Occassions.service";
 import { QueryKeys } from "../../../types";
@@ -9,10 +11,14 @@ type TProps = {
 };
 
 const useCreateOccasion = ({ setNewOccasion, onClose }: TProps) => {
+  const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
   const { mutate, isError, isPending, isSuccess } = useMutation({
-    mutationFn: OccassionsService.addOccasion,
+    mutationFn: async (occasion: AddOccasion) => {
+      const token = await getToken();
+      return OccassionsService.addOccasion(occasion, token);
+    },
     onSuccess: () => {
       setNewOccasion({ name: "" });
       onClose();

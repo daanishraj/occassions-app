@@ -6,7 +6,6 @@ import { selectDayOptions, selectMonthOptions, selectOccassionOptions } from "..
 import styles from "./styles.module.css";
 
 type Props = {
-  userId: string;
   opened: boolean;
   onClose: () => void;
 };
@@ -15,7 +14,7 @@ export type NewOccasion = Partial<AddOccasion>;
 
 const ADD_DIALOG_TITLE = "Add an Occassion";
 
-const AddOccasionDialog = ({ opened, onClose, userId }: Props) => {
+const AddOccasionDialog = ({ opened, onClose }: Props) => {
   const [newOccassion, setNewOccasion] = React.useState<NewOccasion>({
     name: "",
   });
@@ -60,7 +59,8 @@ const AddOccasionDialog = ({ opened, onClose, userId }: Props) => {
   const onSelectDay = (value: string | null) => value && setNewOccasion({ ...newOccassion, day: Number(value) });
 
   const handleAdd = async () => {
-    addOccasion({...newOccassion, userId, day: Number(newOccassion.day) } as AddOccasion);
+    // userId is no longer needed - it comes from authenticated session
+    addOccasion({...newOccassion, day: Number(newOccassion.day) } as AddOccasion);
   };
 
   return (

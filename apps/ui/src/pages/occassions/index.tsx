@@ -9,7 +9,7 @@ import useGetOccasion from "./hooks/use-get-occasion";
 import styles from "./index.module.css";
 
 const Occassions = () => {
-  const {userId, isLoaded} = useAuth();
+  const {isLoaded} = useAuth();
   const [occassions, setOccassions] = React.useState<Occasion[]>([]);
   const [filteredOccassions, setFilteredOccassions] = React.useState<Occasion[]>([]);
   const [addOccassion, setAddOccassion] = React.useState<boolean>(false);
@@ -114,9 +114,9 @@ const Occassions = () => {
             Add
           </Button>
         </div>
-        <AddOccasionDialog opened={addOccassion} onClose={onCloseAddDialog} userId={userId!} />
+        <AddOccasionDialog opened={addOccassion} onClose={onCloseAddDialog} />
         <div className={styles.tableContainer}>
-          <OccasionsTable occassions={sortedOccasions} userId={userId!} />
+          <OccasionsTable occassions={sortedOccasions} />
         </div>
       </div>
       </SignedIn>

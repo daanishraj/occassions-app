@@ -60,7 +60,8 @@ const EditOccasionDialog: React.FC<TProps> = ({ occasion, onClose }: TProps) => 
   const handleSubmit = () => {
     console.log(form.values)
     const payload= { ...form.values, day: Number(form.values.day)  }
-    const editData = { id: occasion.id, userId: occasion.userId, payload }
+    // userId is no longer needed - it comes from authenticated session
+    const editData = { id: occasion.id, payload }
     
     editOccasion(editData)
 

@@ -1,26 +1,53 @@
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import { Occasion } from "@occasions/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import OccassionsService from "../../../services/Occassions.service";
 import { QueryKeys } from "../../../types";
 
 const useGetOccasion = () => {
-  const { user } = useUser()
-  const userId = user?.id; //clerk user should be non-null if user is logged in
+  const { getToken, isLoaded } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
+
+  // Get the session token from Clerk
+  useEffect(() => {
+    const fetchToken = async () => {
+      if (isLoaded) {
+        try {
+          const sessionToken = await getToken();
+          setToken(sessionToken);
+        } catch (error) {
+          console.error("Failed to get session token:", error);
+          setToken(null);
+        }
+      }
+    };
+    fetchToken();
+  }, [getToken, isLoaded]);
+
   const { data, isLoading, isError, error } = useQuery<Occasion[], AxiosError>({
-    queryKey: [QueryKeys.OCCASIONS],
-    queryFn: () => OccassionsService.getOccasions(userId!),
-    enabled: !!userId, 
+    queryKey: [QueryKeys.OCCASIONS, token],
+    queryFn: () => OccassionsService.getOccasions(token),
+    enabled: !!token && isLoaded,
     retry: false,
   });
 
-  if (!userId) {
+  if (!isLoaded) {
+    return {
+      data: undefined,
+      isLoading: true,
+      isError: false,
+      error: undefined,
+    };
+  }
+
+  if (!token) {
     return {
       data: undefined,
       isLoading: false,
       isError: true,
-      error: { message: "Unauthorized: User ID is missing", status: 403 } as AxiosError,
+      error: { message: "Unauthorized: Session token is missing", status: 401 } as AxiosError,
     };
   }
 

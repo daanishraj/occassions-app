@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/clerk-react";
 import { EditOccasion, Occasion } from "@occasions/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -6,16 +7,19 @@ import { QueryKeys } from "../../../types";
 
 export type RequestEditOccasion = {
     id: string;
-    userId: string;
-    payload:  EditOccasion
+    payload: EditOccasion;
 }
 
 const useEditOccasion = (onClose: ()=> void) => {
+  const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation<Occasion, AxiosError,RequestEditOccasion>(
+  const { mutate, isPending } = useMutation<Occasion, AxiosError, RequestEditOccasion>(
     {
-    mutationFn: ({id, userId, payload}) => OccassionsService.editOccasion(id, userId, payload),
+    mutationFn: async ({id, payload}) => {
+      const token = await getToken();
+      return OccassionsService.editOccasion(id, payload, token);
+    },
     onSuccess: (updatedOccasion, { id }) => {
       queryClient.setQueryData<Occasion[]>([QueryKeys.OCCASIONS], (occasions) => {
         if (!occasions) return [];

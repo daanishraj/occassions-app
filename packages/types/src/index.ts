@@ -30,7 +30,7 @@ export const OccasionSchema = z.object({
 });
 
 export const AddOccasionSchema = z.object({
-  userId: z.string(),
+  // userId is no longer required - it comes from authenticated session
   name: z.string(),
   occasionType: z.nativeEnum(OccasionType),
   month: z.nativeEnum(Month),

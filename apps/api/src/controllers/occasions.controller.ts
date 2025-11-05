@@ -7,10 +7,12 @@ import type { Request, Response } from "express";
 const prisma = new PrismaClient()
 
 const getOccasions = async (req: Request, res: Response) => {
-  const userId = req.headers.authorization?.split(" ")[1];
+  // userId is now guaranteed to exist due to requireAuth middleware
+  const userId = req.auth?.userId;
   if (!userId) {
-    return res.status(401).json({ error: "Unauthorized: userId is missing" });
+    return res.status(401).json({ error: "Unauthorized: Authentication required" });
   }
+  
   const occasions = await prisma.occasion.findMany({
     where: {
       userId
@@ -20,16 +22,25 @@ const getOccasions = async (req: Request, res: Response) => {
 };
 
 const addOccasion = async (req: Request, res: Response) => {
+  // userId is now guaranteed to exist due to requireAuth middleware
+  const userId = req.auth?.userId;
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: Authentication required" });
+  }
+
   const parseResult = AddOccasionSchema.safeParse(req.body);
   
   if (!parseResult.success) {
     logger.error("Invalid payload - missing or incorrect fields!");
     return res.status(400).json({ error: "some fields are missing or incorrect", details: parseResult.error.errors });
   }
-  const { userId, name, occasionType, month, day } = req.body;
+  
+  // Extract fields from body (userId is now from auth, not body)
+  const { name, occasionType, month, day } = req.body;
+  
   const newOccasion = await prisma.occasion.create({
     data: {
-      userId,
+      userId, // Use authenticated user ID from middleware
       name,
       occasionType,
       month,
@@ -40,6 +51,12 @@ const addOccasion = async (req: Request, res: Response) => {
 };
 
 const editOccasion = async (req: Request, res: Response) => {
+  // userId is now guaranteed to exist due to requireAuth middleware
+  const userId = req.auth?.userId;
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: Authentication required" });
+  }
+
   const { id } = req.params;
   const parseResult = EditOccasionSchema.safeParse(req.body);
   
@@ -56,6 +73,11 @@ const editOccasion = async (req: Request, res: Response) => {
     
     if (!existingOccasion) {
       return res.status(404).json({ error: "Occasion not found" });
+    }
+
+    // Verify that the occasion belongs to the authenticated user
+    if (existingOccasion.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: You don't have permission to edit this occasion" });
     }
 
     const updatedOccasion = await prisma.occasion.update({
@@ -77,13 +99,35 @@ const editOccasion = async (req: Request, res: Response) => {
 
 
 const deleteOccasion = async (req: Request, res: Response) => {
+  // userId is now guaranteed to exist due to requireAuth middleware
+  const userId = req.auth?.userId;
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: Authentication required" });
+  }
+
   try {
-    const id = req.params.id
+    const id = req.params.id;
+    
+    // First check if the occasion exists and belongs to the user
+    const existingOccasion = await prisma.occasion.findUnique({
+      where: { id: String(id) },
+    });
+    
+    if (!existingOccasion) {
+      return res.status(404).json({ error: 'Occasion not found' });
+    }
+
+    // Verify that the occasion belongs to the authenticated user
+    if (existingOccasion.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: You don't have permission to delete this occasion" });
+    }
+
     const deletedOccasion = await prisma.occasion.delete({
       where: {
         id: String(id)
       }
     })
+    
     res.json(deletedOccasion);
 
   } catch (error: unknown) {
@@ -93,9 +137,7 @@ const deleteOccasion = async (req: Request, res: Response) => {
     } else {
       res.status(500).json({ error: 'Internal Server Error' });
     }
-
   }
- 
 };
 
 export const occasionsController = {

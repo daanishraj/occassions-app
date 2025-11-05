@@ -6,11 +6,10 @@ import useDeleteOccasion from "../../hooks/use-delete-occasion";
 import EditOccasionDialog from "../edit-occasion-dialog";
 
 type Props = {
-  userId: string;
   occassions: Occasion[];
 }
 
-const OccasionsTable = ({ occassions, userId }: Props) => {
+const OccasionsTable = ({ occassions }: Props) => {
   const [selectedOccasionForEdit, setSelectedOccasionForEdit] = React.useState<Occasion | null>(null);
   const { deleteOccasion } = useDeleteOccasion();
   
@@ -22,15 +21,15 @@ const OccasionsTable = ({ occassions, userId }: Props) => {
   const onFinishEditing = () => {
     setSelectedOccasionForEdit(null);
   };
-  const rows = occassions.map(({ id, name, occasionType, month, day }: Occasion) => (
-    <Table.Tr key={id}>
-      <Table.Td>{name}</Table.Td>
-      <Table.Td>{occasionType}</Table.Td>
-      <Table.Td>{month}</Table.Td>
-      <Table.Td>{day}</Table.Td>
+  const rows = occassions.map((occasion: Occasion) => (
+    <Table.Tr key={occasion.id}>
+      <Table.Td>{occasion.name}</Table.Td>
+      <Table.Td>{occasion.occasionType}</Table.Td>
+      <Table.Td>{occasion.month}</Table.Td>
+      <Table.Td>{occasion.day}</Table.Td>
       <Table.Td>
-        <IconEdit onClick={() => onEditOccassion({ id, userId, name, occasionType, month, day })}/>
-        <IconTrash onClick={() => deleteOccasion(id)} />
+        <IconEdit onClick={() => onEditOccassion(occasion)}/>
+        <IconTrash onClick={() => deleteOccasion(occasion.id)} />
       </Table.Td>
     </Table.Tr>
   ));

@@ -1,6 +1,20 @@
+import { vi } from "vitest";
+
+// Mock the authentication middleware BEFORE importing app
+// This ensures the routes use the mocked version
+vi.mock("@/middleware/auth", async () => {
+  const actual = await vi.importActual("@/middleware/auth");
+  const { mockRequireAuth } = await import("../../helpers/auth");
+  return {
+    ...actual,
+    requireAuth: mockRequireAuth,
+  };
+});
+
 import app from "@/app";
 import { Month, OccasionType } from "@prisma/client";
 import request from "supertest";
+import { getAuthHeader } from "../../helpers/auth";
 import { TEST_USER_ID } from "../../helpers/constants";
 
 describe("/occasions", () => {
@@ -11,7 +25,7 @@ describe("/occasions", () => {
     it("should get all the occasions when a request is made", async () => {
       const response = await request(app)
         .get(path)
-        .set("Authorization", `Bearer ${testUserId}`);
+        .set("Authorization", getAuthHeader(testUserId));
       
       if (response.status !== 200) {
         console.error('Response status:', response.status);
@@ -37,9 +51,8 @@ describe("/occasions", () => {
     let occasionId: string;
 
     beforeEach(async () => {
-      // Create an occasion to edit
+      // Create an occasion to edit (userId is now handled by auth middleware)
       const newOccasion = {
-        userId: testUserId,
         name: "Occasion to Edit",
         occasionType: OccasionType.Anniversary,
         month: Month.April,
@@ -48,6 +61,7 @@ describe("/occasions", () => {
 
       const createResponse = await request(app)
         .post(path)
+        .set("Authorization", getAuthHeader(testUserId))
         .send(newOccasion);
 
       occasionId = createResponse.body.id;
@@ -63,6 +77,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", getAuthHeader(testUserId))
         .send(updatedData);
 
       expect(response.status).toBe(200);
@@ -85,6 +100,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${nonExistentId}`)
+        .set("Authorization", getAuthHeader(testUserId))
         .send(updatedData);
 
       expect(response.status).toBe(404);
@@ -99,6 +115,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", getAuthHeader(testUserId))
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -116,6 +133,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", getAuthHeader(testUserId))
         .send(invalidData);
 
       expect(response.status).toBe(400);

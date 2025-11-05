@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
   // Routes
   app.use('/', routes)
 
-
   /** 
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)

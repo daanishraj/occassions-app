@@ -13,7 +13,12 @@ const getOccasions = async (userId: string): Promise<Occasion[]> => {
   return response.data;
 };
 const addOccasion = async (occassion: AddOccasion): Promise<Occasion> => {
-  const response = await Api().post(route, occassion);
+  const { userId } = occassion;
+  const response = await Api().post(route, occassion, {
+    headers: {
+      Authorization: `Bearer ${userId}`
+    }
+  });
   return response.data;
 };
 
@@ -26,8 +31,12 @@ const editOccasion = async (id:string, userId: string, payload: EditOccasion): P
   return response.data;
 };
 
-const deleteOccasion = async (id: string): Promise<AxiosResponse> => {
-  const response = await Api().delete(`${route}/${id}`);
+const deleteOccasion = async (id: string, userId: string): Promise<AxiosResponse> => {
+  const response = await Api().delete(`${route}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${userId}`
+    }
+  });
   return response;
 };
 

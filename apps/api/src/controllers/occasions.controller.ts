@@ -20,13 +20,17 @@ const getOccasions = async (req: Request, res: Response) => {
 };
 
 const addOccasion = async (req: Request, res: Response) => {
+  const userId = req.headers.authorization?.split(" ")[1];
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: userId is missing" });
+  }
   const parseResult = AddOccasionSchema.safeParse(req.body);
   
   if (!parseResult.success) {
     logger.error("Invalid payload - missing or incorrect fields!");
     return res.status(400).json({ error: "some fields are missing or incorrect", details: parseResult.error.errors });
   }
-  const { userId, name, occasionType, month, day } = req.body;
+  const { name, occasionType, month, day } = req.body;
   const newOccasion = await prisma.occasion.create({
     data: {
       userId,
@@ -40,6 +44,11 @@ const addOccasion = async (req: Request, res: Response) => {
 };
 
 const editOccasion = async (req: Request, res: Response) => {
+  const userId = req.headers.authorization?.split(" ")[1];
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: userId is missing" });
+  }
+  
   const { id } = req.params;
   const parseResult = EditOccasionSchema.safeParse(req.body);
   
@@ -56,6 +65,11 @@ const editOccasion = async (req: Request, res: Response) => {
     
     if (!existingOccasion) {
       return res.status(404).json({ error: "Occasion not found" });
+    }
+
+    // Verify that the occasion belongs to the userId from the authorization header
+    if (existingOccasion.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: You can only edit your own occasions" });
     }
 
     const updatedOccasion = await prisma.occasion.update({
@@ -77,8 +91,26 @@ const editOccasion = async (req: Request, res: Response) => {
 
 
 const deleteOccasion = async (req: Request, res: Response) => {
+  const userId = req.headers.authorization?.split(" ")[1];
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: userId is missing" });
+  }
   try {
-    const id = req.params.id
+    const id = req.params.id;
+    
+    // First, verify that the occasion exists and belongs to the userId
+    const existingOccasion = await prisma.occasion.findUnique({
+      where: { id: String(id) },
+    });
+    
+    if (!existingOccasion) {
+      return res.status(404).json({ error: 'Occasion not found' });
+    }
+
+    if (existingOccasion.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: You can only delete your own occasions" });
+    }
+
     const deletedOccasion = await prisma.occasion.delete({
       where: {
         id: String(id)

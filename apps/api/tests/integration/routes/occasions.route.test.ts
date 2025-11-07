@@ -48,6 +48,7 @@ describe("/occasions", () => {
 
       const createResponse = await request(app)
         .post(path)
+        .set("Authorization", `Bearer ${testUserId}`)
         .send(newOccasion);
 
       occasionId = createResponse.body.id;
@@ -63,6 +64,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", `Bearer ${testUserId}`)
         .send(updatedData);
 
       expect(response.status).toBe(200);
@@ -85,6 +87,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${nonExistentId}`)
+        .set("Authorization", `Bearer ${testUserId}`)
         .send(updatedData);
 
       expect(response.status).toBe(404);
@@ -99,6 +102,7 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", `Bearer ${testUserId}`)
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -116,10 +120,30 @@ describe("/occasions", () => {
 
       const response = await request(app)
         .put(`${path}/${occasionId}`)
+        .set("Authorization", `Bearer ${testUserId}`)
         .send(invalidData);
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('error');
+    });
+
+    it("should return 403 when userId does not own the occasion", async () => {
+      const differentUserId = "different-user-id-456";
+      const updatedData = {
+        name: "Unauthorized Update Attempt",
+        occasionType: OccasionType.Birthday,
+        month: Month.January,
+        day: 1,
+      };
+
+      const response = await request(app)
+        .put(`${path}/${occasionId}`)
+        .set("Authorization", `Bearer ${differentUserId}`)
+        .send(updatedData);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Forbidden: You can only edit your own occasions');
     });
   });
 });

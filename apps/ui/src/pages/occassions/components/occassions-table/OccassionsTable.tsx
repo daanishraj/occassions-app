@@ -30,7 +30,7 @@ const OccasionsTable = ({ occassions, userId }: Props) => {
       <Table.Td>{day}</Table.Td>
       <Table.Td>
         <IconEdit onClick={() => onEditOccassion({ id, userId, name, occasionType, month, day })}/>
-        <IconTrash onClick={() => deleteOccasion(id)} />
+        <IconTrash onClick={() => deleteOccasion({ id, userId })} />
       </Table.Td>
     </Table.Tr>
   ));

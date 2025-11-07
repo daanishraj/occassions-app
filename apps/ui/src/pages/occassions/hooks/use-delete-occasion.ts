@@ -6,7 +6,8 @@ const useDeleteOccasion = () => {
   const queryClient = useQueryClient();
 
   const { mutate, isError, isPending, isSuccess } = useMutation({
-    mutationFn: OccassionsService.deleteOccasion,
+    mutationFn: ({ id, userId }: { id: string; userId: string }) => 
+      OccassionsService.deleteOccasion(id, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.OCCASIONS] });
     },

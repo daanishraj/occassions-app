@@ -1,5 +1,6 @@
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import About from "./pages/about";
 import Landing from "./pages/landing";
 import Login from "./pages/login";
 import PageNotFound from "./pages/not-found";
@@ -30,6 +31,7 @@ const App = () => {
             </SignedIn>
             </>
             } />
+          <Route path="/about" element={<About />} />
           <Route path="/occasions" element={
             <SignedIn>
             <Occassions />

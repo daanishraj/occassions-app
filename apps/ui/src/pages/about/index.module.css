@@ -1,0 +1,174 @@
+.aboutPage {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+  padding: clamp(2rem, 5vw, 4rem) 0;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.logoTitle {
+  color: var(--mantine-color-blue-6);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 0;
+}
+
+.loginButton {
+  font-weight: 500;
+  min-height: 44px; /* Minimum touch target size for mobile */
+  padding: 0.625rem 1.25rem;
+}
+
+.container {
+  width: 100%;
+}
+
+.cardsStack {
+  max-width: 100%;
+}
+
+/* Card wrapper divs - these take up the viewport height */
+.fadeIn:not(.scrollIndicator),
+.fadeOut:not(.scrollIndicator) {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardLeft {
+  max-width: min(600px, 90%);
+  margin-right: auto;
+  margin-left: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardRight {
+  max-width: min(600px, 90%);
+  margin-left: auto;
+  margin-right: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.solutionTitle {
+  color: var(--mantine-color-blue-6);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  word-wrap: break-word;
+}
+
+.scrollIndicator {
+  text-align: center;
+  color: var(--mantine-color-gray-5);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  padding: 0.5rem 0;
+  font-style: italic;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scrollIndicatorFirst {
+  margin-top: -2rem;
+  padding-top: 0;
+}
+
+.chevron {
+  width: clamp(2rem, 4vw, 2.5rem);
+  height: clamp(2rem, 4vw, 2.5rem);
+  color: var(--mantine-color-gray-7);
+  stroke-width: 1.5;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fadeIn {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+@media (max-width: 768px) {
+  .aboutPage {
+    padding: 1.5rem 0;
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .loginButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .fadeIn:not(.scrollIndicator),
+  .fadeOut:not(.scrollIndicator) {
+    min-height: 80vh;
+  }
+
+  .cardLeft,
+  .cardRight {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .scrollIndicator {
+    padding: 0.75rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutPage {
+    padding: 1rem 0;
+  }
+
+  .header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .fadeIn:not(.scrollIndicator),
+  .fadeOut:not(.scrollIndicator) {
+    min-height: 75vh;
+  }
+
+  .scrollIndicator {
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+  }
+}
+

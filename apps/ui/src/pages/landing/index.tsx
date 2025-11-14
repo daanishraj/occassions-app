@@ -1,5 +1,5 @@
 import { SignedOut } from "@clerk/clerk-react";
-import { Button, Container, Stack, Text, Title } from "@mantine/core";
+import { Button, Container, Group, Stack, Text, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 
@@ -10,6 +10,14 @@ const Landing = () => {
     <SignedOut>
       <div className={styles.landingPage}>
         <div className={styles.header}>
+          <Title
+            order={3}
+            className={styles.logoTitle}
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
+            NMAD
+          </Title>
           <Button
             variant="filled"
             radius="md"
@@ -31,8 +39,26 @@ const Landing = () => {
                 ta="center"
                 fs="italic"
               >
-                Delight your loved ones & please yourself 🙃
+                Joy, Joy, Joy! 🙃
               </Text>
+              <Group gap="md" mt="lg" justify="center" className={styles.buttonGroup}>
+                <Button
+                  variant="filled"
+                  radius="md"
+                  onClick={() => navigate("/login")}
+                  className={styles.actionButton}
+                >
+                  Login
+                </Button>
+                <Button
+                  variant="outline"
+                  radius="md"
+                  onClick={() => navigate("/about")}
+                  className={styles.actionButton}
+                >
+                  Learn More
+                </Button>
+              </Group>
             </Stack>
             <div className={styles.heroImage}>
               <img
